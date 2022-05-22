@@ -47,7 +47,7 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body className="h-full min-h-screen ">
+      <body className="h-full min-h-screen">
         <LazyMotion features={domMax}>
           <Outlet />
         </LazyMotion>

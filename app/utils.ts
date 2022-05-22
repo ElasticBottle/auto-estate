@@ -1,6 +1,5 @@
 import { useMatches } from "@remix-run/react";
 import { useMemo } from "react";
-
 import type { User } from "~/models/user.server";
 
 const DEFAULT_REDIRECT = "/";
@@ -42,6 +41,14 @@ export function useMatchesData(
     [matchingRoutes, id]
   );
   return route?.data;
+}
+
+export function objectFromFormData(formData: FormData) {
+  const toReturn: Record<string, any> = {};
+  for (const [k, v] of formData.entries()) {
+    toReturn[k] = v;
+  }
+  return toReturn;
 }
 
 function isUser(user: any): user is User {
