@@ -4,6 +4,7 @@ FROM node:16-bullseye-slim as base
 # set for base and all layer that inherit from it
 ENV NODE_ENV production
 
+RUN npm install -g pnpm
 # Install openssl for Prisma
 RUN apt-get update && apt-get install -y openssl sqlite3
 
@@ -12,8 +13,9 @@ FROM base as deps
 
 WORKDIR /myapp
 
-ADD package.json package-lock.json ./
-RUN npm install --production=false
+# pnpm fetch does require only lockfile
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --prod=false
 
 # Setup production node_modules
 FROM base as production-deps
@@ -21,8 +23,8 @@ FROM base as production-deps
 WORKDIR /myapp
 
 COPY --from=deps /myapp/node_modules /myapp/node_modules
-ADD package.json package-lock.json ./
-RUN npm prune --production
+ADD package.json pnpm-lock.yaml ./
+RUN pnpm prune --prod
 
 # Build the app
 FROM base as build
@@ -50,10 +52,10 @@ RUN echo "#!/bin/sh\nset -x\nsqlite3 \$DATABASE_URL" > /usr/local/bin/database-c
 WORKDIR /myapp
 
 COPY --from=production-deps /myapp/node_modules /myapp/node_modules
-COPY --from=build /myapp/node_modules/.prisma /myapp/node_modules/.prisma
+# COPY --from=build /myapp/node_modules/.prisma /myapp/node_modules/.prisma
 
 COPY --from=build /myapp/build /myapp/build
 COPY --from=build /myapp/public /myapp/public
-ADD . .
+COPY --from=build /myapp/package.json /myapp/start.sh /myapp/prisma /myapp/
 
 CMD ["npm", "start"]

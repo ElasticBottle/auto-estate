@@ -35,9 +35,12 @@ const preprocessStringToFloat = <T extends z.ZodTypeAny>(type: T) => {
       case "number":
         return +arg.toFixed(2);
       case "string":
+        const parsedValue = +parseFloat(arg.split(/,\s*/).join("")).toFixed(2);
         return arg === ""
           ? undefined
-          : +parseFloat(arg.split(/,\s*/).join("")).toFixed(2) || "";
+          : typeof parsedValue === "number"
+          ? parsedValue
+          : "";
       default:
         return "";
     }
