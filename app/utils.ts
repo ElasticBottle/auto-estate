@@ -43,12 +43,12 @@ export function useMatchesData(
   return route?.data;
 }
 
-export function objectFromFormData(formData: FormData) {
+export function objectFromFormData<T>(formData: FormData): T {
   const toReturn: Record<string, any> = {};
   for (const [k, v] of formData.entries()) {
     toReturn[k] = v;
   }
-  return toReturn;
+  return toReturn as T;
 }
 
 function isUser(user: any): user is User {
