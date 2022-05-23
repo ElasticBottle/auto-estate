@@ -8,7 +8,7 @@ import {
   propertyDetailsErrorAtom,
 } from "~/atoms/calculatorAtom";
 import DownPayment from "~/components/calculator/property-investment/forms/DownPayment";
-import PropertyPrice from "~/components/calculator/property-investment/PropertyPrice";
+import PropertyPrice from "~/components/calculator/property-investment/forms/PropertyPrice";
 import { Dropdown } from "~/components/Dropdown";
 import Heading from "~/components/Heading";
 import InputWithLabel from "~/components/InputWithLabel";
@@ -49,6 +49,7 @@ export default function PropertyInvestmentInputPage() {
       method="get"
       action={ROUTE_CALC_PROPERTY_INVEST_FINANCIAL_DETAILS}
       onSubmit={onSubmit}
+      noValidate
     >
       <div className="grid max-w-4xl grid-cols-1 p-6 mx-auto space-y-4 md:p-10">
         <Heading>Property Details</Heading>

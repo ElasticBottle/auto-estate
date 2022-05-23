@@ -19,6 +19,7 @@ export default function PropertyPrice() {
         setPropertyPrice(e.target.value);
       }}
       error={error?.propertyPrice?._errors[0]}
+      required
     />
   );
 }

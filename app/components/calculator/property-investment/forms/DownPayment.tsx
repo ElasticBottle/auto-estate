@@ -58,6 +58,7 @@ export default function DownPayment() {
             setDownPayment(e.target.value);
           }}
           error={error?.intendedDownPaymentDollars?._errors[0]}
+          required
         />
         {/* <span className="px-5 pt-2">Or</span>
         <InputWithLabel

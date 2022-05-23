@@ -85,7 +85,7 @@ export default function PropertyInvestmentInputPage() {
         />
         <Dropdown
           name={"creditScore"}
-          label="Property Location"
+          label="Credit Score"
           placeholder="Select your credit score range"
           items={creditScoreChoice}
           error={

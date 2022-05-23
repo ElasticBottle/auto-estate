@@ -25,7 +25,7 @@ export default function InputLabelWrapper({
         <label
           htmlFor={_id}
           className={`absolute top-0.5 left-0 text-sm text-gray-600 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-[1.625rem] peer-placeholder-shown:left-0 ${
-            props.required ? "after:text-rose-700 after:contents-[ *]" : ""
+            props.required ? "after:text-rose-800 after:content-['_*']" : ""
           }`}
         >
           {label}
