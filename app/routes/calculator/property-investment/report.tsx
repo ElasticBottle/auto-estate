@@ -1,25 +1,60 @@
 import { Link, useLoaderData } from "@remix-run/react";
-import type { LoaderFunction } from "@remix-run/server-runtime";
+import type { LoaderFunction, MetaFunction } from "@remix-run/server-runtime";
 import { json } from "@remix-run/server-runtime";
 import React from "react";
 import ROI from "~/components/calculator/property-investment/display/ROI";
 import Heading from "~/components/Heading";
-import { formatCurrency, formatPerc } from "~/lib/utils";
+import {
+  FinancialDetailsFormSchema,
+  PropertyDetailsFormSchema,
+  UserDetailFormSchema,
+} from "~/interface/calculator/PropertyInvestment";
+import { calculatePropertyInvestmentValues } from "~/lib/calculator/propertyInvestment";
 import { objectFromFormData } from "~/utils";
+
+export const meta: MetaFunction = () => ({
+  title: "Property Investment Report",
+});
 
 export const loader: LoaderFunction = async ({ request }) => {
   const url = new URL(request.url);
   const term = objectFromFormData(url.searchParams);
-  console.log("term", term);
+  const userDetails = UserDetailFormSchema.safeParse(term);
+  const propertyDetails = PropertyDetailsFormSchema.safeParse(term);
+  const financialDetails = FinancialDetailsFormSchema.safeParse(term);
+  if (!userDetails.success) {
+    console.log("userDetails.error.format()", userDetails.error.format());
+    return json({ parseError: userDetails.error.format() });
+  }
+  if (!propertyDetails.success) {
+    console.log(
+      "propertyDetails.error.format()",
+      propertyDetails.error.format()
+    );
+    return json({ parseError: propertyDetails.error.format() });
+  }
+  if (!financialDetails.success) {
+    console.log(
+      "financialDetails.error.format()",
+      financialDetails.error.format()
+    );
+    return json({ parseError: financialDetails.error.format() });
+  }
+
+  const result = calculatePropertyInvestmentValues(
+    userDetails.data,
+    propertyDetails.data,
+    financialDetails.data
+  );
+
   return json({
-    mortgageSize: formatCurrency(124_000),
-    mortgageInterest: formatPerc(0.103),
-    totalMortgagePaid: formatCurrency(1_000_000),
+    ...result,
   });
 };
 
 export default function ReportPage() {
   const loaderData = useLoaderData();
+
   return (
     <div className="p-5 space-y-6 md:p-10">
       <Heading>Your investment Evaluation Report</Heading>
@@ -42,44 +77,80 @@ export default function ReportPage() {
 
       <div className="flex flex-col justify-between p-5 px-10 space-y-5 border-2 border-gray-600 rounded-lg md:space-y-0 md:flex-row md:justify-evenly dark:border-gray-300 md:items-start">
         <div className="grid grid-cols-1">
-          <p className="text-base font-bold text-center">Monthly Cost: </p>
-          <p className="text-base">Monthly Mortgage</p>
-          <p className="text-base">Property Tax</p>
-          <p className="text-base">Homeowner's Insurance</p>
-          <p className="text-base">PMI (If applicable)</p>
-          <p className="text-base">HOA Fees (If applicable)</p>
-          <p className="text-base">Utility Bill</p>
-          <p className="text-base">Maintenance Fees</p>
+          <p className="text-base font-bold text-center">
+            Monthly Cost: {loaderData.monthlyCost}
+          </p>
+          <p className="text-base">
+            Monthly Mortgage{loaderData.monthlyMortgage}
+          </p>
+          <p className="text-base">Property Tax{loaderData.propertyTax}</p>
+          <p className="text-base">
+            Homeowner's Insurance{loaderData.homeOwnerInsurance}
+          </p>
+          <p className="text-base">PMI (If applicable){loaderData.pmi}</p>
+          <p className="text-base">
+            HOA Fees (If applicable){loaderData.hoaFees}
+          </p>
+          <p className="text-base">Utility Bill{loaderData.utilityBill}</p>
+          <p className="text-base">
+            Maintenance Fees{loaderData.maintenanceFee}
+          </p>
         </div>
         <div className="grid grid-cols-1">
-          <p className="text-base font-bold text-center">Monthly Revenue:</p>
-          <p className="text-base">Month With best revenue</p>
-          <p className="text-base">Month With Worst Revenue</p>
-          <p className="text-base">Average Monthly Revenue</p>
-          <p className="text-base">Average Occupancy</p>
-          <p className="text-base">AverageDaily Rate</p>
+          <p className="text-base font-bold text-center">
+            Monthly Revenue:{loaderData.monthlyRevenue}
+          </p>
+          <p className="text-base">
+            Month With best revenue{loaderData.bestRevenueMonth}
+          </p>
+          <p className="text-base">
+            Month With Worst Revenue{loaderData.worstRevenueMonth}
+          </p>
+          <p className="text-base">
+            Average Monthly Revenue{loaderData.averageMonthlyRevenue}
+          </p>
+          <p className="text-base">
+            Average Occupancy{loaderData.averageOccupancy}
+          </p>
+          <p className="text-base">
+            AverageDaily Rate{loaderData.averageDailyRate}
+          </p>
         </div>
       </div>
 
       <div className="flex-col items-center px-10">
         <div className="text-base font-bold text-center">
-          Closing/ One time Costs:{" "}
+          Closing/ One time Costs: {loaderData.closingCosts}
         </div>
         <div className="flex flex-col md:justify-center md:flex-row md:space-x-5">
           <div className="flex flex-col">
-            <p className="text-base">Legal Fees</p>
-            <p className="text-base">Land Transfer Tax: </p>
-            <p className="text-base">New Build GST/HST: 5% + HST</p>
+            <p className="text-base">Legal Fees: {loaderData.legalFees}</p>
+            <p className="text-base">
+              Land Transfer Tax: {loaderData.landTransferTax}
+            </p>
+            <p className="text-base">
+              New Build GST/HST: {loaderData.newBuildGst}
+            </p>
           </div>
           <div className="flex flex-col">
-            <p className="text-base">Down Payment</p>
-            <p className="text-base">Home Appraisal: </p>
-            <p className="text-base">Title Insurance</p>
+            <p className="text-base">Down Payment{loaderData.downPayment}</p>
+            <p className="text-base">
+              Home Appraisal: {loaderData.homeAppraisal}
+            </p>
+            <p className="text-base">
+              Title Insurance{loaderData.titleInsurance}
+            </p>
           </div>
           <div className="flex flex-col">
-            <p className="text-base">Home Inspection: </p>
-            <p className="text-base">Utility Hookups: </p>
-            <p className="text-base">Closing Holdback: </p>
+            <p className="text-base">
+              Home Inspection: {loaderData.homeInspection}
+            </p>
+            <p className="text-base">
+              Utility Hookups: {loaderData.utilityHookups}
+            </p>
+            <p className="text-base">
+              Closing Holdback: {loaderData.closingHoldback}
+            </p>
           </div>
         </div>
       </div>
@@ -91,8 +162,12 @@ export default function ReportPage() {
           Estimated Total Tax benefits
         </div>
         <div className="flex flex-col md:justify-center md:space-x-5 md:flex-row">
-          <p className="text-base">Annual Tax benefits: </p>
-          <p className="text-base">One Time Tax benefits: </p>
+          <p className="text-base">
+            Annual Tax benefits: {loaderData.annualTaxBenefits}
+          </p>
+          <p className="text-base">
+            One Time Tax benefits: {loaderData.oneTimeTaxBenefits}
+          </p>
         </div>
         <button className="btn">
           Click here for a detailed and accurate tax benefit analysis

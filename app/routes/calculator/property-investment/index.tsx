@@ -1,6 +1,5 @@
-import { Form, Link } from "@remix-run/react";
-import type { ActionFunction } from "@remix-run/server-runtime";
-import { json } from "@remix-run/server-runtime";
+import { Form, Link, useSearchParams } from "@remix-run/react";
+import { MetaFunction } from "@remix-run/server-runtime";
 import { useAtom } from "jotai";
 import React from "react";
 import {
@@ -24,14 +23,12 @@ import {
 } from "~/interface/calculator/PropertyInvestment";
 import { objectFromFormData } from "~/utils";
 
-export const action: ActionFunction = async ({ request }) => {
-  const data = await request.formData();
-  console.log("data", data.keys());
-  console.log("data.propertyType", data.get("propertyType"));
-  return json({});
-};
+export const meta: MetaFunction = () => ({
+  title: "Property Investment Calculator",
+});
 
 export default function PropertyInvestmentInputPage() {
+  const [searchParams] = useSearchParams();
   const [, setDirection] = useAtom(pageDirectionAtom);
   const [errors, setErrors] = useAtom(propertyDetailsErrorAtom);
 
@@ -57,7 +54,9 @@ export default function PropertyInvestmentInputPage() {
         <Dropdown
           name={"propertyType"}
           label="Property Type"
-          placeholder="Select a Property Type"
+          placeholder={
+            searchParams.get("propertyType") || "Select a Property Type"
+          }
           items={propertyTypeChoice}
           error={
             errors?.propertyType?._errors[0]
@@ -68,7 +67,9 @@ export default function PropertyInvestmentInputPage() {
         <Dropdown
           name={"propertyLocation"}
           label="Property Location"
-          placeholder="Select a location"
+          placeholder={
+            searchParams.get("propertyLocation") || "Select a location"
+          }
           items={propertyLocationChoice}
           error={
             errors?.propertyLocation?._errors[0]
@@ -81,6 +82,7 @@ export default function PropertyInvestmentInputPage() {
           inputMode="decimal"
           name="loanPeriod"
           error={errors?.loanPeriod?._errors[0]}
+          defaultValue={searchParams.get("loanPeriod") || ""}
           required
         />
         <PropertyPrice />

@@ -18,6 +18,7 @@ export const propertyLocationChoice = [
 export const creditScoreChoice = [
   "750 - 850",
   "700 - 749",
+  "650 - 699",
   "560 - 649",
   "300 - 559",
   "I do not know",
@@ -28,7 +29,7 @@ export const employmentStatusChoice = [
   "Currently between jobs",
   "Self employed",
 ] as const;
-const preprocessStringToFloat = (type: z.ZodTypeAny) => {
+const preprocessStringToFloat = <T extends z.ZodTypeAny>(type: T) => {
   return z.preprocess((arg) => {
     switch (typeof arg) {
       case "number":
@@ -83,14 +84,6 @@ export const PropertyDetailsFormSchema = z
     ),
   })
   .superRefine((data, ctx) => {
-    console.log(
-      "data.intendedDownPaymentDollars > data.propertyPrice",
-      data.intendedDownPaymentDollars > data.propertyPrice
-    );
-    console.log(
-      "data.intendedDownPaymentDollars",
-      data.intendedDownPaymentDollars
-    );
     if (data.intendedDownPaymentDollars > data.propertyPrice) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
@@ -125,3 +118,9 @@ export const FinancialDetailsFormSchema = z
 export type FinancialDetailsFormType = z.infer<
   typeof FinancialDetailsFormSchema
 >;
+
+export const UserDetailFormSchema = z.object({
+  name: z.string(),
+  email: z.string().email(),
+});
+export type UserDetailFormType = z.infer<typeof UserDetailFormSchema>;

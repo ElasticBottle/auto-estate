@@ -42,7 +42,14 @@ export function useMatchesData(
   );
   return route?.data;
 }
-
+export function URLSearchParamsFromFormData(data: FormData) {
+  const convertedFormEntries = Array.from(data, ([key, value]) => [
+    key,
+    typeof value === "string" ? value : value.name,
+  ]);
+  const searchParams = new URLSearchParams(convertedFormEntries);
+  return searchParams;
+}
 export function objectFromFormData<T>(formData: FormData): T {
   const toReturn: Record<string, any> = {};
   for (const [k, v] of formData.entries()) {

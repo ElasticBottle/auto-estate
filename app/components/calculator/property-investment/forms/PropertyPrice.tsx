@@ -1,5 +1,6 @@
+import { useSearchParams } from "@remix-run/react";
 import { useAtom } from "jotai";
-import React from "react";
+import React, { useEffect } from "react";
 import {
   propertyDetailsErrorAtom,
   propertyPriceAtom,
@@ -7,8 +8,13 @@ import {
 import InputWithLabel from "~/components/InputWithLabel";
 
 export default function PropertyPrice() {
+  const [searchParams] = useSearchParams();
   const [propertyPrice, setPropertyPrice] = useAtom(propertyPriceAtom);
   const [error] = useAtom(propertyDetailsErrorAtom);
+  useEffect(() => {
+    setPropertyPrice(searchParams.get("propertyPrice") || "");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <InputWithLabel
       label="Property Price (CAD)"
