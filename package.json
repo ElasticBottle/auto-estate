@@ -76,6 +76,7 @@
     "c8": "^7.11.2",
     "cross-env": "^7.0.3",
     "cypress": "^9.6.1",
+    "esbuild-wasm": "^0.14.39",
     "eslint": "^8.15.0",
     "eslint-config-prettier": "^8.5.0",
     "happy-dom": "^3.2.0",
@@ -93,6 +94,14 @@
     "vite": "^2.9.9",
     "vite-tsconfig-paths": "^3.4.1",
     "vitest": "^0.11.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "esbuild": "npm:esbuild-wasm@latest"
+    }
+  },
+  "resolutions": {
+    "sort-package-json": "1.55.0"
   },
   "engines": {
     "node": ">=14"
