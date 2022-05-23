@@ -80,6 +80,7 @@ export default function PropertyInvestmentInputPage() {
         <InputWithLabel
           name={"grossIncome"}
           label="Gross Income (CAD)"
+          required
           inputMode="decimal"
           error={errors?.grossIncome?._errors[0]}
         />

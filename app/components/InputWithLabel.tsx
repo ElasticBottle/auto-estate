@@ -17,7 +17,6 @@ export default function InputLabelWrapper({
   if (!_id) {
     _id = label.split(/\s/).join("-").toLowerCase();
   }
-  console.log("props.required", props.required);
   return (
     <div className="relative w-full pt-5">
       <FormInput id={_id} placeholder=" " {...props} />
