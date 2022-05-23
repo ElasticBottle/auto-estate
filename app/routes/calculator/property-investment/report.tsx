@@ -83,37 +83,37 @@ export default function ReportPage() {
           <p className="text-base">
             Monthly Mortgage{loaderData.monthlyMortgage}
           </p>
-          <p className="text-base">Property Tax{loaderData.propertyTax}</p>
+          <p className="text-base">Property Tax: {loaderData.propertyTax}</p>
           <p className="text-base">
-            Homeowner's Insurance{loaderData.homeOwnerInsurance}
+            Homeowner's Insurance: {loaderData.homeOwnerInsurance}
           </p>
-          <p className="text-base">PMI (If applicable){loaderData.pmi}</p>
+          <p className="text-base">PMI (If applicable): {loaderData.pmi}</p>
           <p className="text-base">
-            HOA Fees (If applicable){loaderData.hoaFees}
+            HOA Fees (If applicable): {loaderData.hoaFees}
           </p>
-          <p className="text-base">Utility Bill{loaderData.utilityBill}</p>
+          <p className="text-base">Utility Bill: {loaderData.utilityBill}</p>
           <p className="text-base">
-            Maintenance Fees{loaderData.maintenanceFee}
+            Maintenance Fees: {loaderData.maintenanceFee}
           </p>
         </div>
         <div className="grid grid-cols-1">
           <p className="text-base font-bold text-center">
-            Monthly Revenue:{loaderData.monthlyRevenue}
+            Monthly Revenue: {loaderData.monthlyRevenue}
           </p>
           <p className="text-base">
-            Month With best revenue{loaderData.bestRevenueMonth}
+            Month With Best Revenue: {loaderData.bestRevenueMonth}
           </p>
           <p className="text-base">
-            Month With Worst Revenue{loaderData.worstRevenueMonth}
+            Month With Worst Revenue: {loaderData.worstRevenueMonth}
           </p>
           <p className="text-base">
-            Average Monthly Revenue{loaderData.averageMonthlyRevenue}
+            Average Monthly Revenue: {loaderData.averageMonthlyRevenue}
           </p>
           <p className="text-base">
-            Average Occupancy{loaderData.averageOccupancy}
+            Average Occupancy: {loaderData.averageOccupancy}
           </p>
           <p className="text-base">
-            AverageDaily Rate{loaderData.averageDailyRate}
+            AverageDaily Rate: {loaderData.averageDailyRate}
           </p>
         </div>
       </div>
@@ -133,12 +133,12 @@ export default function ReportPage() {
             </p>
           </div>
           <div className="flex flex-col">
-            <p className="text-base">Down Payment{loaderData.downPayment}</p>
+            <p className="text-base">Down Payment: {loaderData.downPayment}</p>
             <p className="text-base">
               Home Appraisal: {loaderData.homeAppraisal}
             </p>
             <p className="text-base">
-              Title Insurance{loaderData.titleInsurance}
+              Title Insurance: {loaderData.titleInsurance}
             </p>
           </div>
           <div className="flex flex-col">
@@ -159,7 +159,7 @@ export default function ReportPage() {
 
       <div className="flex flex-col items-center px-10 space-y-3">
         <div className="text-base font-bold text-center">
-          Estimated Total Tax benefits
+          Estimated Total Tax benefits: {loaderData.estimatedTotalTaxBenefits}
         </div>
         <div className="flex flex-col md:justify-center md:space-x-5 md:flex-row">
           <p className="text-base">
