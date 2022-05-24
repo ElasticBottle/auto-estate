@@ -57,7 +57,7 @@ export default function ReportPage() {
 
   return (
     <div className="p-5 space-y-6 md:p-10">
-      <Heading>Your investment Evaluation Report</Heading>
+      <Heading>Your Investment Evaluation Report</Heading>
       <div className="space-y-3">
         <p className="text-base font-bold">
           Monthly Net Operating Income from property:

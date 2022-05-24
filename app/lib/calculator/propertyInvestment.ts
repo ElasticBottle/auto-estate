@@ -1,6 +1,9 @@
-import type {
+import { propertyDetailsErrorAtom } from "~/atoms/calculatorAtom";
+import PropertyPrice from "~/components/calculator/property-investment/forms/PropertyPrice";
+import {
   FinancialDetailsFormType,
   PropertyDetailsFormType,
+  propertyLocationChoice,
   UserDetailFormType,
 } from "~/interface/calculator/PropertyInvestment";
 import { creditScoreChoice } from "~/interface/calculator/PropertyInvestment";
@@ -35,7 +38,9 @@ export function calculatePropertyInvestmentValues(
 
   // TODO: Do the calculations here, edit function to pass in params if you need.
   // ! The types of the parameter are given by the value after ":" above
-  const mortgageSize = calculateMortgageSize();
+  const mortgageSize = calculateMortgageSize(propertyDetails);
+  const monthlyMortgage = calculateMonthlyMortgage(propertyDetails);
+  const propertyTax = calculatePropertyTax(propertyDetails);
   return {
     // todo: Fill out the values here
     // I created some function to format currency and percentage, use as you see fit
@@ -43,8 +48,8 @@ export function calculatePropertyInvestmentValues(
     mortgageInterest: formatPerc(0.103),
     totalMortgagePaid: formatCurrency(1_000_000),
     monthlyCost: 10,
-    monthlyMortgage: 10,
-    propertyTax: 10,
+    monthlyMortgage: formatCurrency(monthlyMortgage),
+    propertyTax: formatCurrency(propertyTax),
     homeOwnerInsurance: 10,
     pmi: 10,
     hoaFees: 10,
@@ -80,9 +85,29 @@ export function calculatePropertyInvestmentValues(
   };
 }
 
-function calculateMortgageSize() {
-  // TODO: Calculation for mortgage size
-  return 1_000_000;
+function calculateMortgageSize(propertyDetails: PropertyDetailsFormType) {
+  // TODO: Calculation for mortgage size;
+  const size = propertyDetails.propertyPrice - propertyDetails.intendedDownPaymentDollars; 
+return size;
 }
 
+
+function calculateMonthlyMortgage(propertyDetails: PropertyDetailsFormType) {
+  const interest = 0.002833;
+  const mortgage = calculateMortgageSize(propertyDetails);
+  const time = propertyDetails.loanPeriod;
+  const monthlyMortgage = (mortgage*interest) / (1 - (1+interest)**(-12*time));
+  return monthlyMortgage;
+
+}
 // TODO, create more functions as needed.
+
+const propertyTaxMapping = {[propertyLocationChoice[0]]: 1.11,
+                      [propertyLocationChoice[1]]: 1.13}
+
+function calculatePropertyTax(propertyDetails: PropertyDetailsFormType) {
+      const price = propertyDetails.propertyPrice;
+      const propertyTax = propertyTaxMapping[propertyDetails.propertyLocation] * price;
+      return propertyTax;
+}
+
