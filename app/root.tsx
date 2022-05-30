@@ -1,9 +1,4 @@
-import type {
-  LinksFunction,
-  LoaderFunction,
-  MetaFunction,
-} from "@remix-run/node";
-import { json } from "@remix-run/node";
+import type { LinksFunction, MetaFunction } from "@remix-run/node";
 import {
   Links,
   LiveReload,
@@ -13,7 +8,6 @@ import {
   ScrollRestoration,
 } from "@remix-run/react";
 import { domMax, LazyMotion } from "framer-motion";
-import { getUser } from "./session.server";
 import tailwindStylesheetUrl from "./styles/tailwind.css";
 
 export const links: LinksFunction = () => {
@@ -26,28 +20,14 @@ export const meta: MetaFunction = () => ({
   viewport: "width=device-width,initial-scale=1",
 });
 
-type LoaderData = {
-  user: Awaited<ReturnType<typeof getUser>>;
-};
-
-export const loader: LoaderFunction = async ({ request }) => {
-  return json<LoaderData>({
-    user: await getUser(request),
-  });
-};
-
 export default function App() {
   return (
-    <html
-      lang="en"
-      className="h-full text-gray-900 bg-gray-50 dark:bg-gray-900 dark:text-gray-50"
-      suppressHydrationWarning
-    >
+    <html lang="en" className="h-full" suppressHydrationWarning>
       <head>
         <Meta />
         <Links />
       </head>
-      <body className="h-full min-h-screen">
+      <body className="min-h-screen" data-theme="light">
         <LazyMotion features={domMax}>
           <Outlet />
         </LazyMotion>

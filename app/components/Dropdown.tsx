@@ -9,15 +9,15 @@ export function Dropdown({
   label,
   items,
   error,
-  placeholder = "Select an option",
+  initialOption = "Select an option",
 }: {
   name: string;
   label?: string;
-  placeholder?: string;
+  initialOption?: string;
   error?: string;
   items?: readonly string[];
 }) {
-  const [selected, setSelected] = useState(placeholder);
+  const [selected, setSelected] = useState(initialOption);
 
   return (
     <div>

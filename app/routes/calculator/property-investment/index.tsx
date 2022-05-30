@@ -1,5 +1,5 @@
 import { Form, Link, useSearchParams } from "@remix-run/react";
-import { MetaFunction } from "@remix-run/server-runtime";
+import type { MetaFunction } from "@remix-run/server-runtime";
 import { useAtom } from "jotai";
 import React from "react";
 import {
@@ -9,7 +9,7 @@ import {
 import DownPayment from "~/components/calculator/property-investment/forms/DownPayment";
 import PropertyPrice from "~/components/calculator/property-investment/forms/PropertyPrice";
 import { Dropdown } from "~/components/Dropdown";
-import Heading from "~/components/Heading";
+import { Heading } from "~/components/Heading";
 import InputWithLabel from "~/components/InputWithLabel";
 import {
   ROUTE_CALC,
@@ -21,7 +21,7 @@ import {
   propertyLocationChoice,
   propertyTypeChoice,
 } from "~/interface/calculator/PropertyInvestment";
-import { objectFromFormData } from "~/utils";
+import { objectFromFormData } from "~/lib/utils";
 
 export const meta: MetaFunction = () => ({
   title: "Property Investment Calculator",
@@ -54,7 +54,7 @@ export default function PropertyInvestmentInputPage() {
         <Dropdown
           name={"propertyType"}
           label="Property Type"
-          placeholder={
+          initialOption={
             searchParams.get("propertyType") || "Select a Property Type"
           }
           items={propertyTypeChoice}
@@ -67,7 +67,7 @@ export default function PropertyInvestmentInputPage() {
         <Dropdown
           name={"propertyLocation"}
           label="Property Location"
-          placeholder={
+          initialOption={
             searchParams.get("propertyLocation") || "Select a location"
           }
           items={propertyLocationChoice}
