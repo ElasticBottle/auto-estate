@@ -2,6 +2,7 @@ import { useLoaderData } from "@remix-run/react";
 import type { LoaderFunction } from "@remix-run/server-runtime";
 import { json } from "@remix-run/server-runtime";
 import React from "react";
+import { ReactCharts } from "~/components/Graph";
 import { calculateGovernmentGrantValues } from "~/lib/calculator/propertyInvestment/calculateGovernmentGrantValues";
 import { getPropertyInvestmentCalculatorDetails } from "~/lib/utils";
 
@@ -25,7 +26,7 @@ export default function GovernmentGrantPage() {
   const loaderData = useLoaderData();
 
   return (
-    <article className="min-w-fit">
+    <article className="md:min-w-[40rem]">
       <h1>Government Programs and Rebates</h1>
       <section>
         Buying a house is a big decision in your life. For most people a
@@ -114,7 +115,46 @@ export default function GovernmentGrantPage() {
               Payments made cheaper by: {loaderData?.percentageSaved}
             </p>
           </div>
-          <div className="aspect-square bg-green-400 min-h-16 min-w-[64px]"></div>
+          <ReactCharts
+            className="aspect-square h-80"
+            // style={{ height: "150px" }}
+            option={{
+              type: "bar",
+              data: {
+                labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+                datasets: [
+                  {
+                    label: "# of Votes",
+                    data: [12, 19, 3, 5, 2, 3],
+                    backgroundColor: [
+                      "rgba(255, 99, 132, 0.2)",
+                      "rgba(54, 162, 235, 0.2)",
+                      "rgba(255, 206, 86, 0.2)",
+                      "rgba(75, 192, 192, 0.2)",
+                      "rgba(153, 102, 255, 0.2)",
+                      "rgba(255, 159, 64, 0.2)",
+                    ],
+                    borderColor: [
+                      "rgba(255, 99, 132, 1)",
+                      "rgba(54, 162, 235, 1)",
+                      "rgba(255, 206, 86, 1)",
+                      "rgba(75, 192, 192, 1)",
+                      "rgba(153, 102, 255, 1)",
+                      "rgba(255, 159, 64, 1)",
+                    ],
+                    borderWidth: 1,
+                  },
+                ],
+              },
+              options: {
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                  },
+                },
+              },
+            }}
+          />
         </div>
       </section>
 
