@@ -24,10 +24,9 @@ export const loader: LoaderFunction = ({ request }) => {
 export default function GovernmentGrantPage() {
   // TODO: Type this
   const loaderData = useLoaderData();
-  console.log("loaderData", loaderData);
 
   return (
-    <div className="p-5 space-y-6 md:p-10">
+    <>
       <Heading>Government Programs and Rebates</Heading>
       <article>
         <section>
@@ -174,6 +173,6 @@ export default function GovernmentGrantPage() {
           </section>
         </section>
       </article>
-    </div>
+    </>
   );
 }

@@ -21,7 +21,7 @@ import {
   propertyLocationChoice,
   propertyTypeChoice,
 } from "~/interface/calculator/PropertyInvestment";
-import { objectFromFormData } from "~/utils";
+import { objectFromFormData } from "~/lib/utils";
 
 export const meta: MetaFunction = () => ({
   title: "Property Investment Calculator",

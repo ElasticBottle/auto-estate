@@ -33,10 +33,10 @@ export default function ReportPage() {
   const loaderData = useLoaderData();
   const location = useLocation();
   const [, setDirection] = useAtom(pageDirectionAtom);
-  // TODO: Prevent the dissappearing of details when playing fade animation
+  // TODO: Prevent the dissappearing of details when playing fade animation to another page
 
   return (
-    <div className="p-5 space-y-6 md:p-10">
+    <>
       <Heading>Your investment Evaluation Report</Heading>
       <div className="space-y-3">
         <p className="text-base font-bold">
@@ -154,6 +154,9 @@ export default function ReportPage() {
             pathname: ROUTE_CALC_PROPERTY_INVEST_TAX_BENEFITS,
             search: location.search,
           }}
+          onClick={() => {
+            setDirection(Direction.FORWARD);
+          }}
           className="btn"
         >
           Click here for a detailed and accurate tax benefit analysis
@@ -220,6 +223,6 @@ export default function ReportPage() {
       <button className="w-full btn btn-primary">
         Click here to finalize report
       </button>
-    </div>
+    </>
   );
 }
