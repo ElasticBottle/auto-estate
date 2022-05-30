@@ -40,6 +40,10 @@ export function calculatePropertyInvestmentReportSummaryValues(
   const mortgageSize = calculateMortgageSize(propertyDetails);
   const monthlyMortgage = calculateMonthlyMortgage(propertyDetails);
   const propertyTax = calculatePropertyTax(propertyDetails);
+
+  const mortgagePayments = calculateMonthlyMortgage(propertyDetails);
+  const propertyTaxPayments = calculatePropertyTax(propertyDetails);
+  const insurancePayments = calculateInsurance(propertyDetails);
   return {
     // todo: Fill out the values here
     // I created some function to format currency and percentage, use as you see fit
@@ -48,19 +52,24 @@ export function calculatePropertyInvestmentReportSummaryValues(
     // this is 10.3%
     // mortgageInterest: 0.103,
     // totalMortgagePaid: 1_000_000,
-    totalMonthlyCost: 10,
-    monthlyMortgage: 10,
-    propertyTax: 10,
-    homeOwnerInsurance: 10,
-    utilityBill: 10,
-    maintenanceFee: 10,
-    miscFees: 1230,
+    // Monthly Cost Section
+    totalMonthlyCost: (mortgagePayments + propertyTaxPayments + insurancePayments + 283 + 488 + 200),
+    monthlyMortgage: mortgagePayments,
+    propertyTax: propertyTaxPayments,
+    homeOwnerInsurance: insurancePayments,
+    utilityBill: 283,
+    maintenanceFee: 488,
+    miscFees: 200,
+
+    // Monthly Revenue Section
     averageMonthlyRevenue: 10,
     // this is 60%
     averageOccupancy: 0.6,
     averageDailyRate: 10,
     bestRevenueMonth: "March",
     worstRevenueMonth: "December",
+
+    // Closing Cost Section
     closingCosts: 10,
     legalFees: 10,
     landTransferTax: 10,
@@ -72,6 +81,8 @@ export function calculatePropertyInvestmentReportSummaryValues(
     utilityHookups: 10,
     closingHoldback: 10,
     // ! Note, these stuff might need tweaking, but feel free to do calculation base on 30 years and I can hook them up in the right place later on
+
+    // ROI section
     roi: 80,
     averageYearlyReturn: 10,
     averageInflation: 10,
@@ -79,6 +90,8 @@ export function calculatePropertyInvestmentReportSummaryValues(
     capRate: 10,
     totalRevenueFromProperty: 10,
     totalProfitFromProperty: 10,
+
+    // Tax Benefits Section
     estimatedTotalTaxBenefits: 10,
     annualTaxBenefits: 10,
     oneTimeTaxBenefits: 10,
@@ -92,6 +105,8 @@ function calculateMortgageSize(propertyDetails: PropertyDetailsFormType) {
   return size;
 }
 
+// Functions that calculate the values
+
 function calculateMonthlyMortgage(propertyDetails: PropertyDetailsFormType) {
   const interest = 0.002833;
   const mortgage = calculateMortgageSize(propertyDetails);
@@ -103,13 +118,23 @@ function calculateMonthlyMortgage(propertyDetails: PropertyDetailsFormType) {
 // TODO, create more functions as needed.
 
 const propertyTaxMapping = {
-  [propertyLocationChoice[0]]: 1.11,
-  [propertyLocationChoice[1]]: 1.13,
+  [propertyLocationChoice[0]]: 0.0111,
+  [propertyLocationChoice[1]]: 0.0113,
 };
 
 function calculatePropertyTax(propertyDetails: PropertyDetailsFormType) {
   const price = propertyDetails.propertyPrice;
   const propertyTax =
-    propertyTaxMapping[propertyDetails.propertyLocation] * price;
+    (propertyTaxMapping[propertyDetails.propertyLocation] * price) / 12;
   return propertyTax;
+}
+
+const propertyInsuranceMapping = {
+  [propertyLocationChoice[0]]: 1524,
+  [propertyLocationChoice[1]]: 1656,
+}
+
+function calculateInsurance(propertyDetails: PropertyDetailsFormType) {
+  const insurance = propertyInsuranceMapping[propertyDetails.propertyLocation] / 12;
+  return insurance;
 }

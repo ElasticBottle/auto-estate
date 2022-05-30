@@ -50,7 +50,7 @@ export default function ReportPage() {
           <li className="text-base font-bold text-center">
             Total Monthly Cost: {formatCurrency(loaderData?.totalMonthlyCost)}
           </li>
-          <li>Monthly Mortgage{formatCurrency(loaderData?.monthlyMortgage)}</li>
+          <li>Monthly Mortgage: {formatCurrency(loaderData?.monthlyMortgage)}</li>
           <li>Property Tax: {formatCurrency(loaderData?.propertyTax)}</li>
           <li>
             Homeowner's Insurance:{" "}
