@@ -48,7 +48,7 @@ export default function ReportPage() {
       <div className="flex flex-col justify-between p-5 px-10 space-y-5 border-2 border-gray-600 rounded-lg md:space-y-0 md:flex-row md:justify-evenly dark:border-gray-300 md:items-start">
         <ul className="list-none p-0">
           <li className="text-base font-bold text-center">
-            Total Monthly Cost: {formatCurrency(loaderData?.monthlyCost)}
+            Total Monthly Cost: {formatCurrency(loaderData?.totalMonthlyCost)}
           </li>
           <li>Monthly Mortgage{formatCurrency(loaderData?.monthlyMortgage)}</li>
           <li>Property Tax: {formatCurrency(loaderData?.propertyTax)}</li>
