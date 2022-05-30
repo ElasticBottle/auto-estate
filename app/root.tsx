@@ -22,16 +22,12 @@ export const meta: MetaFunction = () => ({
 
 export default function App() {
   return (
-    <html
-      lang="en"
-      className="h-full text-gray-900 bg-gray-50 dark:bg-gray-900 dark:text-gray-50"
-      suppressHydrationWarning
-    >
+    <html lang="en" className="h-full" suppressHydrationWarning>
       <head>
         <Meta />
         <Links />
       </head>
-      <body className="h-full min-h-screen" data-theme="light">
+      <body className="min-h-screen" data-theme="light">
         <LazyMotion features={domMax}>
           <Outlet />
         </LazyMotion>

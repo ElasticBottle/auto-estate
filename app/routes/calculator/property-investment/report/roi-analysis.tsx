@@ -1,10 +1,10 @@
 import React from "react";
-import { Heading } from "~/components/Heading";
+import { Td, Th, Tr } from "~/components/Tables";
 
 export default function RoiAnalysis() {
   return (
-    <section className="space-y-8">
-      <Heading>ROI Analysis</Heading>
+    <article>
+      <h1>ROI Analysis</h1>
       <div className="flex justify-center">
         <p className="max-w-prose">
           Here we help you see how your Real Estate Investment has performed
@@ -15,120 +15,102 @@ export default function RoiAnalysis() {
         </p>
       </div>
       <div className="overflow-x-auto w-full">
-        <table className="table table-zebra  w-full">
+        <table className="w-full">
           <thead>
-            <tr>
-              <th></th>
-              <th>
-                Your Real Estate <wbr /> Investment
-              </th>
-              <th>S&P 500</th>
-              <th>TSX Composite</th>
-              <th>
-                High Interest <wbr /> Savings Account
-              </th>
-              <th>5 year Bond</th>
-            </tr>
+            <Tr className="whitespace-nowrap !bg-base-200">
+              <Th isSticky className="md:min-w-[140px]" />
+              <Th>Your Real Estate Investment</Th>
+              <Th>S&P 500</Th>
+              <Th>TSX Composite</Th>
+              <Th>High Interest Savings Account</Th>
+              <Th>5 year Bond</Th>
+            </Tr>
           </thead>
           <tbody>
-            <tr>
-              <th className="md:text-base text-xs max-w-xs ">
-                Gross ROI <wbr /> (Capital Gains)
-              </th>
-              <td>Blue</td>
-              <td>Blue</td>
-              <td>Blue</td>
-              <td>Blue</td>
-              <td>Blue</td>
-            </tr>
-            <tr>
-              <th className="md:text-base text-xs max-w-xs ">Annual Income</th>
-              <td>Purple</td>
-              <td>Purple</td>
-              <td>Purple</td>
-              <td>Purple</td>
-              <td>Purple</td>
-            </tr>
-            <tr>
-              <th className="md:text-base text-xs max-w-xs ">
-                First Time Home <wbr /> Capital Gains <wbr /> over term
-              </th>
-              <td>Red</td>
-              <td>Red</td>
-              <td>Red</td>
-              <td>Red</td>
-              <td>Red</td>
-            </tr>
-            <tr>
-              <th className="md:text-base text-xs max-w-xs ">
-                EBITA over term
-              </th>
-              <td>Red</td>
-              <td>Red</td>
-              <td>Red</td>
-              <td>Red</td>
-              <td>Red</td>
-            </tr>
-            <tr>
-              <th className="md:text-base text-xs max-w-xs ">Tax Obligation</th>
-              <td>Red</td>
-              <td>Red</td>
-              <td>Red</td>
-              <td>Red</td>
-              <td>Red</td>
-            </tr>
-            <tr>
-              <th className="md:text-base text-xs max-w-xs ">
-                Tax Deductions <wbr /> Available
-              </th>
-              <td>Red</td>
-              <td>Red</td>
-              <td>Red</td>
-              <td>Red</td>
-              <td>Red</td>
-            </tr>
-            <tr>
-              <th className="md:text-base text-xs max-w-xs ">NET Gains</th>
-              <td>Red</td>
-              <td>Red</td>
-              <td>Red</td>
-              <td>Red</td>
-              <td>Red</td>
-            </tr>
-            <tr>
-              <th className="md:text-base text-xs max-w-xs ">
-                NET Rate of Return <wbr /> over term
-              </th>
-              <td>Red</td>
-              <td>Red</td>
-              <td>Red</td>
-              <td>Red</td>
-              <td>Red</td>
-            </tr>
-            <tr>
-              <th className="md:text-base text-xs max-w-xs ">
-                Inflation Rate <wbr /> over term
-              </th>
-              <td>Red</td>
-              <td>Red</td>
-              <td>Red</td>
-              <td>Red</td>
-              <td>Red</td>
-            </tr>
-            <tr>
-              <th className="md:text-base text-xs max-w-xs ">
-                Real Rate of Return
-              </th>
-              <td>Red</td>
-              <td>Red</td>
-              <td>Red</td>
-              <td>Red</td>
-              <td>Red</td>
-            </tr>
+            <Tr>
+              <Th isSticky>Gross ROI (Capital Gains)</Th>
+              <Td>Blue</Td>
+              <Td>Blue</Td>
+              <Td>Blue</Td>
+              <Td>Blue</Td>
+              <Td>Blue</Td>
+            </Tr>
+            <Tr>
+              <Th isSticky>Annual Income</Th>
+              <Td>Purple</Td>
+              <Td>Purple</Td>
+              <Td>Purple</Td>
+              <Td>Purple</Td>
+              <Td>Purple</Td>
+            </Tr>
+            <Tr>
+              <Th isSticky>First Time Home Capital Gains over term</Th>
+              <Td>Red</Td>
+              <Td>Red</Td>
+              <Td>Red</Td>
+              <Td>Red</Td>
+              <Td>Red</Td>
+            </Tr>
+            <Tr>
+              <Th isSticky>EBITA over term</Th>
+              <Td>Red</Td>
+              <Td>Red</Td>
+              <Td>Red</Td>
+              <Td>Red</Td>
+              <Td>Red</Td>
+            </Tr>
+            <Tr>
+              <Th isSticky>Tax Obligation</Th>
+              <Td>Red</Td>
+              <Td>Red</Td>
+              <Td>Red</Td>
+              <Td>Red</Td>
+              <Td>Red</Td>
+            </Tr>
+            <Tr>
+              <Th isSticky>Tax Deductions Available</Th>
+              <Td>Red</Td>
+              <Td>Red</Td>
+              <Td>Red</Td>
+              <Td>Red</Td>
+              <Td>Red</Td>
+            </Tr>
+            <Tr>
+              <Th isSticky>NET Gains</Th>
+              <Td>Red</Td>
+              <Td>Red</Td>
+              <Td>Red</Td>
+              <Td>Red</Td>
+              <Td>Red</Td>
+            </Tr>
+            <Tr>
+              <Th isSticky>NET Rate of Return over term</Th>
+              <Td>Red</Td>
+              <Td>Red</Td>
+              <Td>Red</Td>
+              <Td>Red</Td>
+              <Td>Red</Td>
+            </Tr>
+            <Tr>
+              <Th isSticky>Inflation Rate over term</Th>
+              <Td>Red</Td>
+              <Td>Red</Td>
+              <Td>Red</Td>
+              <Td>Red</Td>
+              <Td>Red</Td>
+            </Tr>
+            <Tr>
+              <Th isSticky>Real Rate of Return</Th>
+              <Td>Red</Td>
+              <Td>Red</Td>
+              <Td>Red</Td>
+              <Td>Red</Td>
+              <Td>Red</Td>
+            </Tr>
           </tbody>
         </table>
       </div>
-      <div className="w-full h-40 bg-green-400"></div>
-    </section>
+      <div className=" mt-5 w-full h-40 bg-green-400"></div>
+    </article>
   );
 }

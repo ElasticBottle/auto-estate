@@ -1,13 +1,11 @@
 import React from "react";
-import { Heading } from "~/components/Heading";
+import { Td, Th, Tr } from "~/components/Tables";
 
 export default function TaxBenefitsPage() {
   return (
-    <article className="space-y-10">
-      <section className="grid grid-cols-1 space-y-5">
-        <Heading as="h2" className="font-bold ">
-          Your Taxation with the Investment
-        </Heading>
+    <article>
+      <section className="space-y-5">
+        <h2>Your Taxation with the Investment</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 space-y-5 md:space-y-10">
           <div className="flex justify-center md:order-last">
             <div className="aspect-square h-20 w-20 bg-green-400 "></div>
@@ -38,7 +36,7 @@ export default function TaxBenefitsPage() {
         </div>
       </section>
       <section className="space-y-5">
-        <Heading as="h2">Your Tax Deductibles Breakdown</Heading>
+        <h2>Your Tax Deductibles Breakdown</h2>
         <div className="flex justify-center">
           <p className="max-w-prose">
             As the graphic above illustrates a lot of income can be saved by
@@ -51,79 +49,69 @@ export default function TaxBenefitsPage() {
           </p>
         </div>
         <div className="overflow-x-auto w-full">
-          <table className="table table-zebra  w-full">
+          <table className=" w-full">
             <thead>
-              <tr>
-                <th></th>
-                <th>Estimated Deduction</th>
-                <th>Maximum Deduction</th>
-                <th>Tax Credit</th>
-                <th>Additional Comments</th>
-                <th>Line on Tax form</th>
-              </tr>
+              <Tr className="bg-base-200 whitespace-nowrap">
+                <Th isSticky className="md:min-w-[140px]"></Th>
+                <Th>Estimated Deduction</Th>
+                <Th>Maximum Deduction</Th>
+                <Th>Tax Credit</Th>
+                <Th>Additional Comments</Th>
+                <Th>Line on Tax form</Th>
+              </Tr>
             </thead>
             <tbody>
-              <tr>
-                <th className="md:text-base text-xs max-w-xs ">
-                  Rental Income <wbr /> Deductions
-                </th>
-                <td>Blue</td>
-                <td>Blue</td>
-                <td>Blue</td>
-                <td>Blue</td>
-                <td>Blue</td>
-              </tr>
-              <tr>
-                <th className="md:text-base text-xs max-w-xs ">
-                  CMHC Insurance
-                </th>
-                <td>Purple</td>
-                <td>Purple</td>
-                <td>Purple</td>
-                <td>Purple</td>
-                <td>Purple</td>
-              </tr>
-              <tr>
-                <th className="md:text-base text-xs max-w-xs ">
-                  First Time Home <wbr /> Buyer’s Credit
-                </th>
-                <td>Red</td>
-                <td>Red</td>
-                <td>Red</td>
-                <td>Red</td>
-                <td>Red</td>
-              </tr>
-              <tr>
-                <th className="md:text-base text-xs max-w-xs ">
-                  Moving Expenses
-                </th>
-                <td>Red</td>
-                <td>Red</td>
-                <td>Red</td>
-                <td>Red</td>
-                <td>Red</td>
-              </tr>
-              <tr>
-                <th className="md:text-base text-xs max-w-xs ">
-                  GST/HST Rebate
-                </th>
-                <td>Red</td>
-                <td>Red</td>
-                <td>Red</td>
-                <td>Red</td>
-                <td>Red</td>
-              </tr>
-              <tr>
-                <th className="md:text-base text-xs max-w-xs ">
+              <Tr>
+                <Th isSticky>Rental Income Deductions</Th>
+                <Td>Blue</Td>
+                <Td>Blue</Td>
+                <Td>Blue</Td>
+                <Td>Blue</Td>
+                <Td>Blue</Td>
+              </Tr>
+              <Tr>
+                <Th isSticky>CMHC Insurance</Th>
+                <Td>Purple</Td>
+                <Td>Purple</Td>
+                <Td>Purple</Td>
+                <Td>Purple</Td>
+                <Td>Purple</Td>
+              </Tr>
+              <Tr>
+                <Th isSticky>First Time Home Buyer’s Credit</Th>
+                <Td>Red</Td>
+                <Td>Red</Td>
+                <Td>Red</Td>
+                <Td>Red</Td>
+                <Td>Red</Td>
+              </Tr>
+              <Tr>
+                <Th isSticky>Moving Expenses</Th>
+                <Td>Red</Td>
+                <Td>Red</Td>
+                <Td>Red</Td>
+                <Td>Red</Td>
+                <Td>Red</Td>
+              </Tr>
+              <Tr>
+                <Th isSticky>GST/HST Rebate</Th>
+                <Td>Red</Td>
+                <Td>Red</Td>
+                <Td>Red</Td>
+                <Td>Red</Td>
+                <Td>Red</Td>
+              </Tr>
+              <Tr>
+                <Th isSticky>
                   Working from <wbr />
                   Home Credits
-                </th>
-                <td>Red</td>
-                <td>Red</td>
-                <td>Red</td>
-                <td>Red</td>
-                <td>Red</td>
-              </tr>
+                </Th>
+                <Td>Red</Td>
+                <Td>Red</Td>
+                <Td>Red</Td>
+                <Td>Red</Td>
+                <Td>Red</Td>
+              </Tr>
             </tbody>
           </table>
         </div>
