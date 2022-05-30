@@ -16,7 +16,7 @@ import {
   pageDirectionAtom,
 } from "~/atoms/calculatorAtom";
 import { Dropdown } from "~/components/Dropdown";
-import Heading from "~/components/Heading";
+import { Heading } from "~/components/Heading";
 import InputWithLabel from "~/components/InputWithLabel";
 import { Modal } from "~/components/Modal";
 import {
@@ -36,7 +36,6 @@ import {
   FinancialDetailsFormSchema,
   UserDetailFormSchema,
 } from "~/interface/calculator/PropertyInvestment";
-import { objectFromFormData, URLSearchParamsFromFormData } from "~/utils";
 
 export const meta: MetaFunction = () => ({
   title: "Property Investment Calculator - Financial Details",

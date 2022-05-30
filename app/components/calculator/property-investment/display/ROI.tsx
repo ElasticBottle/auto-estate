@@ -7,7 +7,7 @@ export default function ROI() {
   return (
     <div className="flex flex-col items-center px-10">
       <div className="text-base font-bold text-center">
-        ROI: {loaderData.roi}% Over past {years} years
+        ROI: {loaderData?.roi}% Over past {years} years
       </div>
       <input
         className="my-3 "
@@ -23,22 +23,22 @@ export default function ROI() {
       <div className="flex flex-col md:flex-row md:justify-center md:space-x-5">
         <div className="flex flex-col">
           <p className="text-base">
-            Average Yearly Return: : {loaderData.averageYearlyReturn}
+            Average Yearly Return: : {loaderData?.averageYearlyReturn}
           </p>
           <p className="text-base">
-            Average Inflation: : {loaderData.averageInflation}
+            Average Inflation: : {loaderData?.averageInflation}
           </p>
           <p className="text-base">
-            Real Yearly Return: : {loaderData.realYearlyReturn}
+            Real Yearly Return: : {loaderData?.realYearlyReturn}
           </p>
-          <p className="text-base">Cap Rate: : {loaderData.capRate}</p>
+          <p className="text-base">Cap Rate: : {loaderData?.capRate}</p>
         </div>
         <div className="flex flex-col">
           <p className="text-base">
-            Total Revenue from Property: {loaderData.totalRevenueFromProperty}
+            Total Revenue from Property: {loaderData?.totalRevenueFromProperty}
           </p>
           <p className="text-base">
-            Total Profit from Property: {loaderData.totalProfitFromProperty}
+            Total Profit from Property: {loaderData?.totalProfitFromProperty}
           </p>
         </div>
       </div>

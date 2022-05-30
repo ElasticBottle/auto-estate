@@ -1,5 +1,5 @@
 {
-  "name": "autoEstate-f974",
+  "name": "auto-estate",
   "private": true,
   "description": "",
   "license": "",
@@ -12,9 +12,8 @@
     "dev:css": "npm run generate:css -- --watch",
     "dev:remix": "cross-env NODE_ENV=development binode --require ./mocks -- @remix-run/dev:remix dev",
     "format": "prettier --write .",
-    "generate:css": "tailwindcss -o ./app/styles/tailwind.css",
+    "generate:css": "tailwindcss -i ./app/styles/tailwindGen.css -o ./app/styles/tailwind.css",
     "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint .",
-    "setup": "prisma migrate dev && prisma db seed",
     "start": "remix-serve build",
     "start:mocks": "binode --require ./mocks -- @remix-run/serve:remix-serve build",
     "test": "vitest",
@@ -34,9 +33,6 @@
     "@babel/core": "^7.4.0-0",
     "@babel/preset-env": "^7.1.6",
     "@headlessui/react": "^1.6.2",
-    "@mantine/hooks": "^4.2.5",
-    "@mantine/ssr": "^4.2.5",
-    "@prisma/client": "^3.14.0",
     "@radix-ui/react-dropdown-menu": "^0.1.6",
     "@radix-ui/react-label": "^0.1.5",
     "@radix-ui/react-popover": "^0.1.6",
@@ -46,6 +42,7 @@
     "@remix-run/serve": "^1.5.1",
     "@remix-run/server-runtime": "^1.5.1",
     "bcryptjs": "^2.4.3",
+    "classnames": "^2.3.1",
     "daisyui": "^2.15.0",
     "framer-motion": "^6.3.3",
     "jotai": "^1.6.7",
@@ -85,7 +82,6 @@
     "postcss": "^8.4.13",
     "prettier": "2.6.2",
     "prettier-plugin-tailwindcss": "^0.1.10",
-    "prisma": "^3.14.0",
     "start-server-and-test": "^1.14.0",
     "tailwindcss": "^3.0.24",
     "ts-node": "^10.7.0",
@@ -105,8 +101,5 @@
   },
   "engines": {
     "node": ">=14"
-  },
-  "prisma": {
-    "seed": "ts-node --require tsconfig-paths/register prisma/seed.ts"
   }
 }
