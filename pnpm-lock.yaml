@@ -35,11 +35,11 @@ specifiers:
   bcryptjs: ^2.4.3
   binode: ^1.0.5
   c8: ^7.11.2
+  chart.js: ^3.8.0
   classnames: ^2.3.1
   cross-env: ^7.0.3
   cypress: ^9.6.1
   daisyui: ^2.15.0
-  echarts: ^5.3.2
   esbuild-wasm: ^0.14.39
   eslint: ^8.15.0
   eslint-config-prettier: ^8.5.0
@@ -78,9 +78,9 @@ dependencies:
   '@remix-run/serve': 1.5.1_sfoxds7t5ydpegc3knd667wn6m
   '@remix-run/server-runtime': 1.5.1_sfoxds7t5ydpegc3knd667wn6m
   bcryptjs: 2.4.3
+  chart.js: 3.8.0
   classnames: 2.3.1
   daisyui: 2.15.0_g4zu76bh2fxeiogiaazxcsmzqe
-  echarts: 5.3.2
   framer-motion: 6.3.3_sfoxds7t5ydpegc3knd667wn6m
   jotai: 1.6.7_rh2m6lvjnki7ibqdl6dj7at7hm
   react: 17.0.2
@@ -3615,6 +3615,10 @@ packages:
     resolution: {integrity: sha512-mT8iDcrh03qDGRRmoA2hmBJnxpllMR+0/0qlzjqZES6NdiWDcZkCNAk4rPFZ9Q85r27unkiNNg8ZOiwZXBHwcA==}
     dev: true
 
+  /chart.js/3.8.0:
+    resolution: {integrity: sha512-cr8xhrXjLIXVLOBZPkBZVF6NDeiVIrPLHcMhnON7UufudL+CNeRrD+wpYanswlm8NpudMdrt3CHoLMQMxJhHRg==}
+    dev: false
+
   /check-error/1.0.2:
     resolution: {integrity: sha512-BrgHpW9NURQgzoNyjfq0Wu6VFO6D7IZEmJNdtgNqpzGG8RuNFHt2jQxWlAs4HMe119chBnv+34syEZtc6IhLtA==}
     dev: true
@@ -4337,13 +4341,6 @@ packages:
       jsbn: 0.1.1
       safer-buffer: 2.1.2
     dev: true
-
-  /echarts/5.3.2:
-    resolution: {integrity: sha512-LWCt7ohOKdJqyiBJ0OGBmE9szLdfA9sGcsMEi+GGoc6+Xo75C+BkcT/6NNGRHAWtnQl2fNow05AQjznpap28TQ==}
-    dependencies:
-      tslib: 2.3.0
-      zrender: 5.3.1
-    dev: false
 
   /ee-first/1.1.1:
     resolution: {integrity: sha1-WQxhFWsK4vTwJVcyoViyZrxWsh0=}
@@ -9380,10 +9377,6 @@ packages:
   /tslib/1.14.1:
     resolution: {integrity: sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==}
 
-  /tslib/2.3.0:
-    resolution: {integrity: sha512-N82ooyxVNm6h1riLCoyS9e3fuJ3AMG2zIZs2Gd1ATcSFjSA23Q0fzjjZeh0jbJvWVDZ0cJT8yaNNaaXHzueNjg==}
-    dev: false
-
   /tslib/2.4.0:
     resolution: {integrity: sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ==}
 
@@ -10090,12 +10083,6 @@ packages:
 
   /zod/3.17.2:
     resolution: {integrity: sha512-L8UPS2J/F3dIA8gsPTvGjd8wSRuwR1Td4AqR2Nw8r8BgcLIbZZ5/tCII7hbTLXTQDhxUnnsFdHwpETGajt5i3A==}
-    dev: false
-
-  /zrender/5.3.1:
-    resolution: {integrity: sha512-7olqIjy0gWfznKr6vgfnGBk7y4UtdMvdwFmK92vVQsQeDPyzkHW1OlrLEKg6GHz1W5ePf0FeN1q2vkl/HFqhXw==}
-    dependencies:
-      tslib: 2.3.0
     dev: false
 
   /zwitch/2.0.2:
