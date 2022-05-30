@@ -3,6 +3,10 @@ import type { LoaderFunction } from "@remix-run/server-runtime";
 import { json } from "@remix-run/server-runtime";
 import React from "react";
 import { ReactCharts } from "~/components/Graph";
+import {
+  defaultGraphDataOptions,
+  defaultGraphOptions,
+} from "~/constants/graph";
 import { calculateGovernmentGrantValues } from "~/lib/calculator/propertyInvestment/calculateGovernmentGrantValues";
 import {
   formatCurrency,
@@ -30,7 +34,7 @@ export default function GovernmentGrantPage() {
   const loaderData = useLoaderData();
 
   return (
-    <article className="md:min-w-[40rem]">
+    <article>
       <h1>Government Programs and Rebates</h1>
       <section>
         Buying a house is a big decision in your life. For most people a
@@ -122,52 +126,31 @@ export default function GovernmentGrantPage() {
             </p>
           </div>
           <ReactCharts
-            className="aspect-square h-80"
-            // style={{ height: "150px" }}
+            className="aspect-square"
             option={{
               type: "bar",
               data: {
                 labels: ["Without Incentive", "With Incentive"],
                 datasets: [
                   {
-                    label: "Payment",
-                    data: [65, 5],
-                    backgroundColor: [
-                      //   // "rgba(255, 99, 132, 0.2)",
-                      //   // "rgba(255, 159, 64, 0.2)",
-                      //   "rgba(255, 205, 86, 0.2)",
-                      //   "rgba(75, 192, 192, 0.2)",
-                      "rgba(54, 162, 235, 0.2)",
-                      //   // "rgba(153, 102, 255, 0.2)",
-                      //   // "rgba(201, 203, 207, 0.2)",
+                    label: "Monthly Payments",
+                    data: [
+                      loaderData?.monthlyPaymentWithoutIncentive,
+                      loaderData?.monthlyPaymentWithIncentive,
                     ],
-                    borderColor: [
-                      //   // "rgb(255, 99, 132)",
-                      //   // "rgb(255, 159, 64)",
-                      //   "rgb(255, 205, 86)",
-                      //   "rgb(75, 192, 192)",
-                      // "rgb(54, 162, 235)",
-                      //   // "rgb(153, 102, 255)",
-                      "rgb(201, 203, 207)",
-                    ],
-                    borderWidth: 1,
-                    hoverBackgroundColor: "rgba(255,99,132,0.4)",
-                    hoverBorderColor: "rgba(255,99,132,1)",
+                    ...defaultGraphDataOptions({ colorCount: 1 }),
                   },
                 ],
               },
               options: {
-                maintainAspectRatio: false,
-                responsive: true,
-                scales: {
-                  y: {
-                    beginAtZero: true,
-                  },
-                },
+                ...defaultGraphOptions,
                 plugins: {
+                  legend: {
+                    display: false,
+                  },
                   title: {
                     display: true,
-                    text: "Custom Chart Title",
+                    text: "Monthly Payments (lower is better)",
                   },
                 },
               },

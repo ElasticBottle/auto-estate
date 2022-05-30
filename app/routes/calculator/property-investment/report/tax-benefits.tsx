@@ -1,37 +1,162 @@
+import { useLoaderData } from "@remix-run/react";
+import type { LoaderFunction } from "@remix-run/server-runtime";
+import { json } from "@remix-run/server-runtime";
 import React from "react";
+import { ReactCharts } from "~/components/Graph";
 import { Td, Th, Tr } from "~/components/Tables";
+import {
+  defaultGraphDataOptions,
+  defaultGraphOptions,
+} from "~/constants/graph";
+import { calculateTaxBenefitValues } from "~/lib/calculator/propertyInvestment/calculateTaxBenefitValues";
+import {
+  formatCurrency,
+  formatPerc,
+  getPropertyInvestmentCalculatorDetails,
+} from "~/lib/utils";
+
+export const loader: LoaderFunction = ({ request }) => {
+  const { userDetails, propertyDetails, financialDetails } =
+    getPropertyInvestmentCalculatorDetails(request.url);
+
+  const result = calculateTaxBenefitValues(
+    userDetails.data,
+    propertyDetails.data,
+    financialDetails.data
+  );
+
+  return json({
+    ...result,
+  });
+};
 
 export default function TaxBenefitsPage() {
+  const loaderData = useLoaderData();
+
   return (
-    <article>
+    <article className="lg:min-w-[35rem]">
       <section className="space-y-5">
         <h2>Your Taxation with the Investment</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 space-y-5 md:space-y-10">
+        <div className="grid grid-cols-1 md:grid-cols-3 space-y-5 md:space-y-10">
           <div className="flex justify-center md:order-last">
-            <div className="aspect-square h-20 w-20 bg-green-400 "></div>
+            <ReactCharts
+              className="w-full"
+              option={{
+                type: "pie",
+                data: {
+                  labels: ["Property Income", "Other Income"],
+                  datasets: [
+                    {
+                      label: "Income Source",
+                      data: [
+                        loaderData?.annualPropertyIncome,
+                        loaderData?.annualOtherIncome,
+                      ],
+                      ...defaultGraphDataOptions({ colorCount: 2 }),
+                    },
+                  ],
+                },
+                options: {
+                  ...defaultGraphOptions,
+                  plugins: {
+                    legend: {
+                      display: true,
+                      position: "top",
+                    },
+                    title: {
+                      display: true,
+                      text: "Income Source Breakdown",
+                    },
+                  },
+                  layout: {
+                    padding: 10,
+                  },
+                },
+              }}
+            />
           </div>
-          <ul>
-            <li className="font-bold">Annual Property Income: CA$ 38,400</li>
-            <li className="font-bold">
-              Annual Income through other sources: CA$ 120,000
+          <ul className="md:col-span-2 font-bold">
+            <li>
+              Annual Property Income:{" "}
+              {formatCurrency(loaderData?.annualPropertyIncome)}
             </li>
-            <li className="font-bold">Total Annual Income: CA$ 158,400</li>
+            <li>
+              Annual Income through other sources:{" "}
+              {formatCurrency(loaderData?.annualOtherIncome)}
+            </li>
+            <li>
+              Total Annual Income:{" "}
+              {formatCurrency(loaderData?.totalAnnualIncome)}
+            </li>
           </ul>
         </div>
-        <div className=" grid grid-cols-1 md:grid-cols-2 space-y-10 ">
+        <div className=" flex flex-col md:flex-row md:space-y-10 ">
           <div className="md:order-last w-full flex flex-col items-center">
-            <div className="aspect-square h-20 w-20 bg-green-400 "></div>
+            <ReactCharts
+              className="w-full "
+              option={{
+                type: "bar",
+                data: {
+                  labels: ["Before Deductibles", "After Deductibles"],
+                  datasets: [
+                    {
+                      label: "Net Income",
+                      data: [
+                        loaderData?.netIncomeBeforeDeductibles,
+                        loaderData?.netIncomeAfterDeductibles,
+                      ],
+                      ...defaultGraphDataOptions({ colorCount: 1 }),
+                    },
+                    {
+                      label: "Taxed Bill",
+                      data: [
+                        loaderData?.taxedBillBeforeDeductibles,
+                        loaderData?.taxedBillAfterDeductibles,
+                      ],
+                      ...defaultGraphDataOptions({ colorCount: 1, offset: 1 }),
+                    },
+                  ],
+                },
+                options: {
+                  ...defaultGraphOptions,
+                  plugins: {
+                    legend: {
+                      display: true,
+                      position: "top",
+                    },
+                    title: {
+                      display: true,
+                      text: "Annual Income breakdown",
+                    },
+                  },
+                  scales: {
+                    x: {
+                      stacked: true,
+                    },
+                    y: {
+                      stacked: true,
+                    },
+                  },
+                },
+              }}
+            />
             <p>
               By using the tax deductions, you effectivity can increase your net
-              income by 10.11%
+              income by {formatPerc(loaderData?.netIncomeChangePercentage)}
             </p>
           </div>
-          <ul>
-            <li className="font-bold">
-              Annual Tax Bill before Deductions: CA$ 55,557
+          <ul className="font-bold">
+            <li>
+              Annual Tax Bill before Deductions:{" "}
+              {formatCurrency(loaderData?.annualTaxBeforeDeductibles)}
             </li>
-            <li className="font-bold">Eligible Deductions: CA$ 23,400</li>
-            <li className="font-bold">Net Annual Income: CA$ 113,242</li>
+            <li>
+              Eligible Deductions:{" "}
+              {formatCurrency(loaderData?.eligibleDeductions)}
+            </li>
+            <li>
+              Net Annual Income: {formatCurrency(loaderData?.netAnnualIncome)}
+            </li>
           </ul>
         </div>
       </section>
