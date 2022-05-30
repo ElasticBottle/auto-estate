@@ -3,7 +3,10 @@ import type {
   PropertyDetailsFormType,
   UserDetailFormType,
 } from "~/interface/calculator/PropertyInvestment";
-import { creditScoreChoice } from "~/interface/calculator/PropertyInvestment";
+import {
+  creditScoreChoice,
+  propertyLocationChoice,
+} from "~/interface/calculator/PropertyInvestment";
 
 export function calculatePropertyInvestmentReportSummaryValues(
   userDetails: UserDetailFormType,
@@ -34,7 +37,9 @@ export function calculatePropertyInvestmentReportSummaryValues(
 
   // TODO: Do the calculations here, edit function to pass in params if you need.
   // ! The types of the parameter are given by the value after ":" above
-  const mortgageSize = calculateMortgageSize();
+  const mortgageSize = calculateMortgageSize(propertyDetails);
+  const monthlyMortgage = calculateMonthlyMortgage(propertyDetails);
+  const propertyTax = calculatePropertyTax(propertyDetails);
   return {
     // todo: Fill out the values here
     // I created some function to format currency and percentage, use as you see fit
@@ -80,9 +85,31 @@ export function calculatePropertyInvestmentReportSummaryValues(
   };
 }
 
-function calculateMortgageSize() {
-  // TODO: Calculation for mortgage size
-  return 1_000_000;
+function calculateMortgageSize(propertyDetails: PropertyDetailsFormType) {
+  // TODO: Calculation for mortgage size;
+  const size =
+    propertyDetails.propertyPrice - propertyDetails.intendedDownPaymentDollars;
+  return size;
 }
 
+function calculateMonthlyMortgage(propertyDetails: PropertyDetailsFormType) {
+  const interest = 0.002833;
+  const mortgage = calculateMortgageSize(propertyDetails);
+  const time = propertyDetails.loanPeriod;
+  const monthlyMortgage =
+    (mortgage * interest) / (1 - (1 + interest) ** (-12 * time));
+  return monthlyMortgage;
+}
 // TODO, create more functions as needed.
+
+const propertyTaxMapping = {
+  [propertyLocationChoice[0]]: 1.11,
+  [propertyLocationChoice[1]]: 1.13,
+};
+
+function calculatePropertyTax(propertyDetails: PropertyDetailsFormType) {
+  const price = propertyDetails.propertyPrice;
+  const propertyTax =
+    propertyTaxMapping[propertyDetails.propertyLocation] * price;
+  return propertyTax;
+}
