@@ -54,7 +54,7 @@ export default function PropertyInvestmentInputPage() {
         <Dropdown
           name={"propertyType"}
           label="Property Type"
-          placeholder={
+          initialOption={
             searchParams.get("propertyType") || "Select a Property Type"
           }
           items={propertyTypeChoice}
@@ -67,7 +67,7 @@ export default function PropertyInvestmentInputPage() {
         <Dropdown
           name={"propertyLocation"}
           label="Property Location"
-          placeholder={
+          initialOption={
             searchParams.get("propertyLocation") || "Select a location"
           }
           items={propertyLocationChoice}

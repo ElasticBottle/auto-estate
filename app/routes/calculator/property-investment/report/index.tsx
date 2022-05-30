@@ -5,10 +5,9 @@ import { useAtom } from "jotai";
 import React from "react";
 import { pageDirectionAtom } from "~/atoms/calculatorAtom";
 import ROI from "~/components/calculator/property-investment/display/ROI";
-import { Heading } from "~/components/Heading";
 import {
   ROUTE_CALC_PROPERTY_INVEST_GOVERNMENT_GRANTS,
-  ROUTE_CALC_PROPERTY_INVEST_TAX_BENEFITS,
+  ROUTE_CALC_PROPERTY_INVEST_TAX_BENEFITS
 } from "~/constants/routes";
 import { Direction } from "~/interface/calculator/PropertyInvestment";
 import { calculatePropertyInvestmentValues } from "~/lib/calculator/propertyInvestment";
@@ -36,12 +35,12 @@ export default function ReportPage() {
   // TODO: Prevent the dissappearing of details when playing fade animation to another page
 
   return (
-    <>
-      <Heading>Your investment Evaluation Report</Heading>
-      <div className="space-y-3">
-        <p className="text-base font-bold">
-          Monthly Net Operating Income from property:
-        </p>
+    <article className="min-w-fit">
+      <h1>Your investment Evaluation Report</h1>
+      <p className="text-base font-bold">
+        Monthly Net Operating Income from property:
+      </p>
+      {/* <div className="space-y-3">
         <div className="flex flex-col justify-between space-y-1 md:flex-row">
           <p className="text-base font-bold">
             Mortgage Size: {loaderData?.mortgageSize}
@@ -53,7 +52,7 @@ export default function ReportPage() {
             Total Mortgage Paid: {loaderData?.totalMortgagePaid}
           </p>
         </div>
-      </div>
+      </div> */}
 
       <div className="flex flex-col justify-between p-5 px-10 space-y-5 border-2 border-gray-600 rounded-lg md:space-y-0 md:flex-row md:justify-evenly dark:border-gray-300 md:items-start">
         <div className="grid grid-cols-1">
@@ -223,6 +222,6 @@ export default function ReportPage() {
       <button className="w-full btn btn-primary">
         Click here to finalize report
       </button>
-    </>
+    </article>
   );
 }

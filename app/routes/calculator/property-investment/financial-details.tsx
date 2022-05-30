@@ -90,9 +90,9 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 export default function PropertyInvestmentInputPage() {
-  const [queryParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const prevInputs: React.ReactChild[] = [];
-  queryParams.forEach((value, key) => {
+  searchParams.forEach((value, key) => {
     prevInputs.push(<input key={key} name={key} defaultValue={value} hidden />);
   });
 
@@ -106,8 +106,8 @@ export default function PropertyInvestmentInputPage() {
 
   const [errors, setErrors] = useAtom(financialDetailsErrorAtom);
 
-  const [name, setName] = React.useState("");
-  const [email, setEmail] = React.useState("");
+  const [name, setName] = React.useState(searchParams.get("name") || "");
+  const [email, setEmail] = React.useState(searchParams.get("email") || "");
 
   const validateMainForm = (formElement: HTMLFormElement) => {
     const data = new FormData(formElement);
@@ -143,6 +143,7 @@ export default function PropertyInvestmentInputPage() {
         <InputWithLabel
           name={"grossIncome"}
           label="Gross Income (CAD)"
+          defaultValue={searchParams.get("grossIncome") || ""}
           required
           inputMode="decimal"
           error={errors?.grossIncome?._errors[0]}
@@ -150,7 +151,9 @@ export default function PropertyInvestmentInputPage() {
         <Dropdown
           name={"creditScore"}
           label="Credit Score"
-          placeholder="Select your credit score range"
+          initialOption={
+            searchParams.get("creditScore") || "Select your credit score range"
+          }
           items={creditScoreChoice}
           error={
             errors?.creditScore?._errors[0]
@@ -161,13 +164,16 @@ export default function PropertyInvestmentInputPage() {
         <InputWithLabel
           name={"currentDebt"}
           label="Current Debt (CAD)"
+          defaultValue={searchParams.get("currentDebt") || ""}
           inputMode="decimal"
           error={errors?.currentDebt?._errors[0]}
         />
         <Dropdown
           name={"employmentStatus"}
           label="Employment Status"
-          placeholder="Select a status"
+          initialOption={
+            searchParams.get("employmentStatus") || "Select a status"
+          }
           items={employmentStatusChoice}
           error={
             errors?.employmentStatus?._errors[0]
@@ -239,6 +245,7 @@ export default function PropertyInvestmentInputPage() {
           <button
             className="ml-2 btn btn-primary"
             onClick={() => {
+              setIsModalOpen(false);
               submit(formRef.current);
             }}
           >
