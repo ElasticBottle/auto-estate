@@ -4,7 +4,11 @@ import { json } from "@remix-run/server-runtime";
 import React from "react";
 import { ReactCharts } from "~/components/Graph";
 import { calculateGovernmentGrantValues } from "~/lib/calculator/propertyInvestment/calculateGovernmentGrantValues";
-import { getPropertyInvestmentCalculatorDetails } from "~/lib/utils";
+import {
+  formatCurrency,
+  formatPerc,
+  getPropertyInvestmentCalculatorDetails,
+} from "~/lib/utils";
 
 export const loader: LoaderFunction = ({ request }) => {
   const { userDetails, propertyDetails, financialDetails } =
@@ -98,21 +102,23 @@ export default function GovernmentGrantPage() {
           <div className="list-none">
             <p className="font-bold">
               First Time Home Buyer’s Incentive:{" "}
-              {loaderData?.firstTimeIncentive}
+              {formatCurrency(loaderData?.firstTimeIncentive)}
             </p>
             <p className="font-bold">
               Monthly Payments without Incentive:{" "}
-              {loaderData?.monthlyPaymentWithoutIncentive}
+              {formatCurrency(loaderData?.monthlyPaymentWithoutIncentive)}
             </p>
             <p className="font-bold">
               Monthly Payments with Incentive:{" "}
-              {loaderData?.monthlyPaymentWithIncentive}
+              {formatCurrency(loaderData?.monthlyPaymentWithIncentive)}
             </p>
             <p className="font-bold">
-              Money Saved over Term: {loaderData?.moneySavedOverTerm}
+              Money Saved over Term:{" "}
+              {formatCurrency(loaderData?.moneySavedOverTerm)}
             </p>
             <p className="font-bold">
-              Payments made cheaper by: {loaderData?.percentageSaved}
+              Payments made cheaper by:{" "}
+              {formatPerc(loaderData?.percentageSaved)}
             </p>
           </div>
           <ReactCharts
@@ -121,35 +127,47 @@ export default function GovernmentGrantPage() {
             option={{
               type: "bar",
               data: {
-                labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+                labels: ["Without Incentive", "With Incentive"],
                 datasets: [
                   {
-                    label: "# of Votes",
-                    data: [12, 19, 3, 5, 2, 3],
+                    label: "Payment",
+                    data: [65, 5],
                     backgroundColor: [
-                      "rgba(255, 99, 132, 0.2)",
+                      //   // "rgba(255, 99, 132, 0.2)",
+                      //   // "rgba(255, 159, 64, 0.2)",
+                      //   "rgba(255, 205, 86, 0.2)",
+                      //   "rgba(75, 192, 192, 0.2)",
                       "rgba(54, 162, 235, 0.2)",
-                      "rgba(255, 206, 86, 0.2)",
-                      "rgba(75, 192, 192, 0.2)",
-                      "rgba(153, 102, 255, 0.2)",
-                      "rgba(255, 159, 64, 0.2)",
+                      //   // "rgba(153, 102, 255, 0.2)",
+                      //   // "rgba(201, 203, 207, 0.2)",
                     ],
                     borderColor: [
-                      "rgba(255, 99, 132, 1)",
-                      "rgba(54, 162, 235, 1)",
-                      "rgba(255, 206, 86, 1)",
-                      "rgba(75, 192, 192, 1)",
-                      "rgba(153, 102, 255, 1)",
-                      "rgba(255, 159, 64, 1)",
+                      //   // "rgb(255, 99, 132)",
+                      //   // "rgb(255, 159, 64)",
+                      //   "rgb(255, 205, 86)",
+                      //   "rgb(75, 192, 192)",
+                      // "rgb(54, 162, 235)",
+                      //   // "rgb(153, 102, 255)",
+                      "rgb(201, 203, 207)",
                     ],
                     borderWidth: 1,
+                    hoverBackgroundColor: "rgba(255,99,132,0.4)",
+                    hoverBorderColor: "rgba(255,99,132,1)",
                   },
                 ],
               },
               options: {
+                maintainAspectRatio: false,
+                responsive: true,
                 scales: {
                   y: {
                     beginAtZero: true,
+                  },
+                },
+                plugins: {
+                  title: {
+                    display: true,
+                    text: "Custom Chart Title",
                   },
                 },
               },

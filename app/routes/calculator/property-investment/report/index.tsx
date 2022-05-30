@@ -7,17 +7,21 @@ import { pageDirectionAtom } from "~/atoms/calculatorAtom";
 import ROI from "~/components/calculator/property-investment/display/ROI";
 import {
   ROUTE_CALC_PROPERTY_INVEST_GOVERNMENT_GRANTS,
-  ROUTE_CALC_PROPERTY_INVEST_TAX_BENEFITS
+  ROUTE_CALC_PROPERTY_INVEST_TAX_BENEFITS,
 } from "~/constants/routes";
 import { Direction } from "~/interface/calculator/PropertyInvestment";
-import { calculatePropertyInvestmentValues } from "~/lib/calculator/propertyInvestment";
-import { getPropertyInvestmentCalculatorDetails } from "~/lib/utils";
+import { calculatePropertyInvestmentReportSummaryValues } from "~/lib/calculator/propertyInvestment/calculatePropertyInvestmentReportSummaryValues";
+import {
+  formatCurrency,
+  formatPerc,
+  getPropertyInvestmentCalculatorDetails,
+} from "~/lib/utils";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const { userDetails, propertyDetails, financialDetails } =
     getPropertyInvestmentCalculatorDetails(request.url);
 
-  const result = calculatePropertyInvestmentValues(
+  const result = calculatePropertyInvestmentReportSummaryValues(
     userDetails.data,
     propertyDetails.data,
     financialDetails.data
@@ -33,68 +37,43 @@ export default function ReportPage() {
   const location = useLocation();
   const [, setDirection] = useAtom(pageDirectionAtom);
   // TODO: Prevent the dissappearing of details when playing fade animation to another page
-
+  console.log("loaderData.miscFees", loaderData.miscFees);
   return (
-    <article className="min-w-fit">
+    <article className="md:min-w-[768px]">
       <h1>Your investment Evaluation Report</h1>
       <p className="text-base font-bold">
         Monthly Net Operating Income from property:
       </p>
-      {/* <div className="space-y-3">
-        <div className="flex flex-col justify-between space-y-1 md:flex-row">
-          <p className="text-base font-bold">
-            Mortgage Size: {loaderData?.mortgageSize}
-          </p>
-          <p className="text-base font-bold">
-            Mortgage Interest: {loaderData?.mortgageInterest}
-          </p>
-          <p className="text-base font-bold">
-            Total Mortgage Paid: {loaderData?.totalMortgagePaid}
-          </p>
-        </div>
-      </div> */}
 
       <div className="flex flex-col justify-between p-5 px-10 space-y-5 border-2 border-gray-600 rounded-lg md:space-y-0 md:flex-row md:justify-evenly dark:border-gray-300 md:items-start">
-        <div className="grid grid-cols-1">
-          <p className="text-base font-bold text-center">
-            Monthly Cost: {loaderData?.monthlyCost}
-          </p>
-          <p className="text-base">
-            Monthly Mortgage{loaderData?.monthlyMortgage}
-          </p>
-          <p className="text-base">Property Tax: {loaderData?.propertyTax}</p>
-          <p className="text-base">
-            Homeowner's Insurance: {loaderData?.homeOwnerInsurance}
-          </p>
-          <p className="text-base">PMI (If applicable): {loaderData?.pmi}</p>
-          <p className="text-base">
-            HOA Fees (If applicable): {loaderData?.hoaFees}
-          </p>
-          <p className="text-base">Utility Bill: {loaderData?.utilityBill}</p>
-          <p className="text-base">
-            Maintenance Fees: {loaderData?.maintenanceFee}
-          </p>
-        </div>
-        <div className="grid grid-cols-1">
-          <p className="text-base font-bold text-center">
-            Monthly Revenue: {loaderData?.monthlyRevenue}
-          </p>
-          <p className="text-base">
-            Month With Best Revenue: {loaderData?.bestRevenueMonth}
-          </p>
-          <p className="text-base">
-            Month With Worst Revenue: {loaderData?.worstRevenueMonth}
-          </p>
-          <p className="text-base">
-            Average Monthly Revenue: {loaderData?.averageMonthlyRevenue}
-          </p>
-          <p className="text-base">
-            Average Occupancy: {loaderData?.averageOccupancy}
-          </p>
-          <p className="text-base">
-            AverageDaily Rate: {loaderData?.averageDailyRate}
-          </p>
-        </div>
+        <ul className="list-none p-0">
+          <li className="text-base font-bold text-center">
+            Total Monthly Cost: {formatCurrency(loaderData?.monthlyCost)}
+          </li>
+          <li>Monthly Mortgage{formatCurrency(loaderData?.monthlyMortgage)}</li>
+          <li>Property Tax: {formatCurrency(loaderData?.propertyTax)}</li>
+          <li>
+            Homeowner's Insurance:{" "}
+            {formatCurrency(loaderData?.homeOwnerInsurance)}
+          </li>
+          <li>Utility Bill: {formatCurrency(loaderData?.utilityBill)}</li>
+          <li>
+            Maintenance Fees: {formatCurrency(loaderData?.maintenanceFee)}
+          </li>
+          <li>Misc Fees: {formatCurrency(loaderData?.miscFees)}</li>
+        </ul>
+        <ul className="list-none p-0">
+          <li className="text-base font-bold text-center">
+            Average Monthly Revenue:{" "}
+            {formatCurrency(loaderData?.averageMonthlyRevenue)}
+          </li>
+          <li>Average Occupancy: {formatPerc(loaderData?.averageOccupancy)}</li>
+          <li>
+            Average Daily Rate: {formatCurrency(loaderData?.averageDailyRate)}
+          </li>
+          <li>Month With Highest Revenue: {loaderData?.bestRevenueMonth}</li>
+          <li>Month With Lowest Revenue: {loaderData?.worstRevenueMonth}</li>
+        </ul>
       </div>
 
       <div className="flex-col items-center px-10">
@@ -103,33 +82,19 @@ export default function ReportPage() {
         </div>
         <div className="flex flex-col md:justify-center md:flex-row md:space-x-5">
           <div className="flex flex-col">
-            <p className="text-base">Legal Fees: {loaderData?.legalFees}</p>
-            <p className="text-base">
-              Land Transfer Tax: {loaderData?.landTransferTax}
-            </p>
-            <p className="text-base">
-              New Build GST/HST: {loaderData?.newBuildGst}
-            </p>
+            <p>Legal Fees: {loaderData?.legalFees}</p>
+            <p>Land Transfer Tax: {loaderData?.landTransferTax}</p>
+            <p>New Build GST/HST: {loaderData?.newBuildGst}</p>
           </div>
           <div className="flex flex-col">
-            <p className="text-base">Down Payment: {loaderData?.downPayment}</p>
-            <p className="text-base">
-              Home Appraisal: {loaderData?.homeAppraisal}
-            </p>
-            <p className="text-base">
-              Title Insurance: {loaderData?.titleInsurance}
-            </p>
+            <p>Down Payment: {loaderData?.downPayment}</p>
+            <p>Home Appraisal: {loaderData?.homeAppraisal}</p>
+            <p>Title Insurance: {loaderData?.titleInsurance}</p>
           </div>
           <div className="flex flex-col">
-            <p className="text-base">
-              Home Inspection: {loaderData?.homeInspection}
-            </p>
-            <p className="text-base">
-              Utility Hookups: {loaderData?.utilityHookups}
-            </p>
-            <p className="text-base">
-              Closing Holdback: {loaderData?.closingHoldback}
-            </p>
+            <p>Home Inspection: {loaderData?.homeInspection}</p>
+            <p>Utility Hookups: {loaderData?.utilityHookups}</p>
+            <p>Closing Holdback: {loaderData?.closingHoldback}</p>
           </div>
         </div>
       </div>

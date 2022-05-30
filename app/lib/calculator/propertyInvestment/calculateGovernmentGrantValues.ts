@@ -3,7 +3,6 @@ import type {
   PropertyDetailsFormType,
   UserDetailFormType,
 } from "~/interface/calculator/PropertyInvestment";
-import { formatCurrency, formatPerc } from "~/lib/utils";
 
 export function calculateGovernmentGrantValues(
   userDetails: UserDetailFormType,
@@ -12,10 +11,11 @@ export function calculateGovernmentGrantValues(
 ) {
   return {
     qualification: "GOOD NEWS: You qualify for this incentive",
-    firstTimeIncentive: formatCurrency(25000),
-    monthlyPaymentWithoutIncentive: formatCurrency(2100),
-    monthlyPaymentWithIncentive: formatCurrency(1800),
-    moneySavedOverTerm: formatCurrency(1800),
-    percentageSaved: formatPerc(0.142),
+    firstTimeIncentive: 25000,
+    monthlyPaymentWithoutIncentive: 2100,
+    monthlyPaymentWithIncentive: 1800,
+    moneySavedOverTerm: 1800,
+    // this is 14.2%
+    percentageSaved: 0.142,
   };
 }

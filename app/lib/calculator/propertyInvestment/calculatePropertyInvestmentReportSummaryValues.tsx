@@ -4,9 +4,8 @@ import type {
   UserDetailFormType,
 } from "~/interface/calculator/PropertyInvestment";
 import { creditScoreChoice } from "~/interface/calculator/PropertyInvestment";
-import { formatCurrency, formatPerc } from "../utils";
 
-export function calculatePropertyInvestmentValues(
+export function calculatePropertyInvestmentReportSummaryValues(
   userDetails: UserDetailFormType,
   propertyDetails: PropertyDetailsFormType,
   financialDetails: FinancialDetailsFormType
@@ -39,23 +38,24 @@ export function calculatePropertyInvestmentValues(
   return {
     // todo: Fill out the values here
     // I created some function to format currency and percentage, use as you see fit
-    mortgageSize: formatCurrency(mortgageSize),
-    mortgageInterest: formatPerc(0.103),
-    totalMortgagePaid: formatCurrency(1_000_000),
-    monthlyCost: 10,
+    monthlyNetIncomeFromProperty: 1000,
+    // mortgageSize: mortgageSize,
+    // this is 10.3%
+    // mortgageInterest: 0.103,
+    // totalMortgagePaid: 1_000_000,
+    totalMonthlyCost: 10,
     monthlyMortgage: 10,
     propertyTax: 10,
     homeOwnerInsurance: 10,
-    pmi: 10,
-    hoaFees: 10,
     utilityBill: 10,
     maintenanceFee: 10,
-    monthlyRevenue: 10,
-    bestRevenueMonth: 10,
-    worstRevenueMonth: 10,
+    miscFees: 1230,
     averageMonthlyRevenue: 10,
-    averageOccupancy: 10,
+    // this is 60%
+    averageOccupancy: 0.6,
     averageDailyRate: 10,
+    bestRevenueMonth: "March",
+    worstRevenueMonth: "December",
     closingCosts: 10,
     legalFees: 10,
     landTransferTax: 10,
