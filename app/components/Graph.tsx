@@ -1,10 +1,13 @@
 import type { ChartConfiguration } from "chart.js";
 import {
+  ArcElement,
   BarController,
   BarElement,
   CategoryScale,
   Chart,
+  Legend,
   LinearScale,
+  PieController,
   Title,
   Tooltip,
 } from "chart.js";
@@ -13,9 +16,12 @@ import React from "react";
 
 Chart.register(
   LinearScale,
+  ArcElement,
   BarElement,
   BarController,
   CategoryScale,
+  PieController,
+  Legend,
   Title,
   Tooltip
 );

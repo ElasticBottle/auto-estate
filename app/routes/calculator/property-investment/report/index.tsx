@@ -37,9 +37,9 @@ export default function ReportPage() {
   const location = useLocation();
   const [, setDirection] = useAtom(pageDirectionAtom);
   // TODO: Prevent the dissappearing of details when playing fade animation to another page
-  console.log("loaderData.miscFees", loaderData.miscFees);
+
   return (
-    <article className="md:min-w-[768px]">
+    <article>
       <h1>Your investment Evaluation Report</h1>
       <p className="text-base font-bold">
         Monthly Net Operating Income from property:
