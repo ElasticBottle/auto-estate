@@ -38,12 +38,10 @@ export function calculatePropertyInvestmentReportSummaryValues(
   // TODO: Do the calculations here, edit function to pass in params if you need.
   // ! The types of the parameter are given by the value after ":" above
   const mortgageSize = calculateMortgageSize(propertyDetails);
-  const monthlyMortgage = calculateMonthlyMortgage(propertyDetails);
-  const propertyTax = calculatePropertyTax(propertyDetails);
-
   const mortgagePayments = calculateMonthlyMortgage(propertyDetails);
   const propertyTaxPayments = calculatePropertyTax(propertyDetails);
   const insurancePayments = calculateInsurance(propertyDetails);
+  const landTransferTax = calculateLandTransferTax(propertyDetails);
   return {
     // todo: Fill out the values here
     // I created some function to format currency and percentage, use as you see fit
@@ -72,24 +70,24 @@ export function calculatePropertyInvestmentReportSummaryValues(
     // Closing Cost Section
     closingCosts: 10,
     legalFees: 10,
-    landTransferTax: 10,
+    landTransferTax: landTransferTax,
     newBuildGst: 10,
     downPayment: "string works too",
     homeAppraisal: 10,
-    titleInsurance: 10,
-    homeInspection: 10,
+    titleInsurance: 200,
+    homeInspection: 500,
     utilityHookups: 10,
     closingHoldback: 10,
     // ! Note, these stuff might need tweaking, but feel free to do calculation base on 30 years and I can hook them up in the right place later on
 
     // ROI section
-    roi: 80,
-    averageYearlyReturn: 10,
-    averageInflation: 10,
-    realYearlyReturn: 10,
-    capRate: 10,
-    totalRevenueFromProperty: 10,
-    totalProfitFromProperty: 10,
+    roi: 555,
+    averageYearlyReturn: 5.88,
+    averageInflation: 1.96,
+    realYearlyReturn: 3.92,
+    capRate: 5,
+    totalRevenueFromProperty: 1400000,
+    totalProfitFromProperty: 970000,
 
     // Tax Benefits Section
     estimatedTotalTaxBenefits: 10,
@@ -137,4 +135,25 @@ const propertyInsuranceMapping = {
 function calculateInsurance(propertyDetails: PropertyDetailsFormType) {
   const insurance = propertyInsuranceMapping[propertyDetails.propertyLocation] / 12;
   return insurance;
+}
+
+function calculateLandTransferTax(propertyDetails: PropertyDetailsFormType) {
+  const price = propertyDetails.propertyPrice;
+  let tax = 0;
+  if (price <= 55000) {
+    tax = price * 0.0005;
+  }
+  else if (price > 55000 && price <= 250000) {
+    tax = 55000 * 0.005 + (price - 55000) * 0.01;
+  } 
+  else if (price > 250000 && price <= 400000) {
+    tax = 55000 * 0.005 + 195000 * 0.01 + (price - 250000) * 0.015;
+  } 
+  else if (price > 400000 && price <= 2000000) {
+    tax = 55000 * 0.005 + 195000 * 0.01 + 150000 * 0.015 + (price - 400000) * 0.02;
+  } 
+  else if (price > 2000000) {
+    tax = 55000 * 0.005 + 195000 * 0.01 + 150000 * 0.015 +  1600000 * 0.02 + (price - 2000000) * 0.025;
+  } 
+  return tax;
 }
