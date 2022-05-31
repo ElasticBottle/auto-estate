@@ -44,14 +44,16 @@ export function calculatePropertyInvestmentReportSummaryValues(
   const landTransferTax = calculateLandTransferTax(propertyDetails);
   return {
     // todo: Fill out the values here
-    // I created some function to format currency and percentage, use as you see fit
     monthlyNetIncomeFromProperty: 1000,
-    // mortgageSize: mortgageSize,
-    // this is 10.3%
-    // mortgageInterest: 0.103,
-    // totalMortgagePaid: 1_000_000,
+
     // Monthly Cost Section
-    totalMonthlyCost: (mortgagePayments + propertyTaxPayments + insurancePayments + 283 + 488 + 200),
+    totalMonthlyCost:
+      mortgagePayments +
+      propertyTaxPayments +
+      insurancePayments +
+      283 +
+      488 +
+      200,
     monthlyMortgage: mortgagePayments,
     propertyTax: propertyTaxPayments,
     homeOwnerInsurance: insurancePayments,
@@ -61,6 +63,20 @@ export function calculatePropertyInvestmentReportSummaryValues(
 
     // Monthly Revenue Section
     averageMonthlyRevenue: 10,
+    forecastedMonthlyRevenue: {
+      January: 10,
+      February: 10,
+      March: 10,
+      April: 10,
+      May: 10,
+      June: 10,
+      July: 10,
+      August: 10,
+      September: 10,
+      October: 10,
+      November: 10,
+      December: 10,
+    },
     // this is 60%
     averageOccupancy: 0.6,
     averageDailyRate: 10,
@@ -69,30 +85,40 @@ export function calculatePropertyInvestmentReportSummaryValues(
 
     // Closing Cost Section
     closingCosts: 10,
-    legalFees: 10,
     landTransferTax: landTransferTax,
-    newBuildGst: 10,
-    downPayment: "string works too",
-    homeAppraisal: 10,
+    legalFees: 10,
+    propertyTaxAdjustment: 10,
+    gst: 10,
     titleInsurance: 200,
-    homeInspection: 500,
-    utilityHookups: 10,
-    closingHoldback: 10,
+    homeInspection: 450,
+    otherTaxes: 50,
+    interestAdjustment: 100,
+    homeAppraisal: 300,
     // ! Note, these stuff might need tweaking, but feel free to do calculation base on 30 years and I can hook them up in the right place later on
 
     // ROI section
-    roi: 555,
-    averageYearlyReturn: 5.88,
-    averageInflation: 1.96,
-    realYearlyReturn: 3.92,
-    capRate: 5,
-    totalRevenueFromProperty: 1400000,
-    totalProfitFromProperty: 970000,
+    roi: 5.55,
+    averageYearlyReturn: 0.0588,
+    averageInflation: 0.0196,
+    realYearlyReturn: 0.0392,
+    capRate: 0.05,
+    propertyPriceOverYears: {
+      2018: 100,
+      2019: 120,
+      2020: 200,
+      2021: 225,
+      2022: 201,
+    },
 
     // Tax Benefits Section
-    estimatedTotalTaxBenefits: 10,
+    totalTaxBenefits: 10,
     annualTaxBenefits: 10,
     oneTimeTaxBenefits: 10,
+
+    // gov grant section
+    maxGovernmentGrants: 45000,
+    homeBuyerGrant: 35000,
+    firstTimeBuyerIncentive: 10000,
   };
 }
 
@@ -130,10 +156,11 @@ function calculatePropertyTax(propertyDetails: PropertyDetailsFormType) {
 const propertyInsuranceMapping = {
   [propertyLocationChoice[0]]: 1524,
   [propertyLocationChoice[1]]: 1656,
-}
+};
 
 function calculateInsurance(propertyDetails: PropertyDetailsFormType) {
-  const insurance = propertyInsuranceMapping[propertyDetails.propertyLocation] / 12;
+  const insurance =
+    propertyInsuranceMapping[propertyDetails.propertyLocation] / 12;
   return insurance;
 }
 
@@ -142,18 +169,20 @@ function calculateLandTransferTax(propertyDetails: PropertyDetailsFormType) {
   let tax = 0;
   if (price <= 55000) {
     tax = price * 0.0005;
-  }
-  else if (price > 55000 && price <= 250000) {
+  } else if (price > 55000 && price <= 250000) {
     tax = 55000 * 0.005 + (price - 55000) * 0.01;
-  } 
-  else if (price > 250000 && price <= 400000) {
+  } else if (price > 250000 && price <= 400000) {
     tax = 55000 * 0.005 + 195000 * 0.01 + (price - 250000) * 0.015;
-  } 
-  else if (price > 400000 && price <= 2000000) {
-    tax = 55000 * 0.005 + 195000 * 0.01 + 150000 * 0.015 + (price - 400000) * 0.02;
-  } 
-  else if (price > 2000000) {
-    tax = 55000 * 0.005 + 195000 * 0.01 + 150000 * 0.015 +  1600000 * 0.02 + (price - 2000000) * 0.025;
-  } 
+  } else if (price > 400000 && price <= 2000000) {
+    tax =
+      55000 * 0.005 + 195000 * 0.01 + 150000 * 0.015 + (price - 400000) * 0.02;
+  } else if (price > 2000000) {
+    tax =
+      55000 * 0.005 +
+      195000 * 0.01 +
+      150000 * 0.015 +
+      1600000 * 0.02 +
+      (price - 2000000) * 0.025;
+  }
   return tax;
 }

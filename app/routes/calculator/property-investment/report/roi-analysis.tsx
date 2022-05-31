@@ -1,7 +1,13 @@
+import { useLoaderData } from "@remix-run/react";
 import React from "react";
+import { ReactCharts } from "~/components/Graph";
 import { Td, Th, Tr } from "~/components/Tables";
+import { defaultGraphOptions } from "~/constants/graph";
+import { roiAnalysisInvestmentType } from "~/interface/calculator/PropertyInvestment";
 
 export default function RoiAnalysis() {
+  const loaderData = useLoaderData();
+
   return (
     <article>
       <h1>ROI Analysis</h1>
@@ -19,11 +25,9 @@ export default function RoiAnalysis() {
           <thead>
             <Tr className="whitespace-nowrap !bg-base-200">
               <Th isSticky className="md:min-w-[140px]" />
-              <Th>Your Real Estate Investment</Th>
-              <Th>S&P 500</Th>
-              <Th>TSX Composite</Th>
-              <Th>High Interest Savings Account</Th>
-              <Th>5 year Bond</Th>
+              {roiAnalysisInvestmentType.map((investment) => {
+                return <Th key={investment}>{investment}</Th>;
+              })}
             </Tr>
           </thead>
           <tbody>
@@ -110,7 +114,27 @@ export default function RoiAnalysis() {
           </tbody>
         </table>
       </div>
-      <div className=" mt-5 w-full h-40 bg-green-400"></div>
+      <ReactCharts
+        option={{
+          type: "line",
+          data: {
+            labels: [...roiAnalysisInvestmentType],
+            datasets: [],
+          },
+          options: {
+            ...defaultGraphOptions,
+            plugins: {
+              legend: {
+                position: "top",
+              },
+              title: {
+                display: true,
+                text: "ROI Analysis breakdown",
+              },
+            },
+          },
+        }}
+      />
     </article>
   );
 }

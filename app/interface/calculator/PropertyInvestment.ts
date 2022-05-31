@@ -29,6 +29,7 @@ export const employmentStatusChoice = [
   "Currently between jobs",
   "Self employed",
 ] as const;
+
 const preprocessStringToFloat = <T extends z.ZodTypeAny>(type: T) => {
   return z.preprocess((arg) => {
     switch (typeof arg) {
@@ -127,3 +128,11 @@ export const UserDetailFormSchema = z.object({
   email: z.string().email(),
 });
 export type UserDetailFormType = z.infer<typeof UserDetailFormSchema>;
+
+export const roiAnalysisInvestmentType = [
+  "Your Real Estate Investment",
+  "S&P 500",
+  "TSX Composite",
+  "High Interest Savings Account",
+  "5 year Bond",
+] as const;

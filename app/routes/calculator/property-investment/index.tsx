@@ -78,7 +78,7 @@ export default function PropertyInvestmentInputPage() {
           }
         />
         <InputWithLabel
-          label="Loan Period"
+          label="Loan Period (years)"
           inputMode="decimal"
           name="loanPeriod"
           error={errors?.loanPeriod?._errors[0]}

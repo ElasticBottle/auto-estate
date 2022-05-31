@@ -32,7 +32,7 @@ export function defaultGraphDataOptions({
     colorCount > backgroundColor.length ||
     offset + colorCount > backgroundColor.length
   ) {
-    throw new Error("Not enough colorrs for graph");
+    throw new Error("Not enough colors for graph");
   }
   return {
     backgroundColor: backgroundColor.slice(offset, colorCount + offset),
