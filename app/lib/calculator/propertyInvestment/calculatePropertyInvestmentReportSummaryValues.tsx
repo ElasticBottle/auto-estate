@@ -37,7 +37,6 @@ export function calculatePropertyInvestmentReportSummaryValues(
 
   // TODO: Do the calculations here, edit function to pass in params if you need.
   // ! The types of the parameter are given by the value after ":" above
-  const mortgageSize = calculateMortgageSize(propertyDetails);
   const mortgagePayments = calculateMonthlyMortgage(propertyDetails);
   const propertyTaxPayments = calculatePropertyTax(propertyDetails);
   const insurancePayments = calculateInsurance(propertyDetails);
@@ -134,7 +133,7 @@ function calculateMortgageSize(propertyDetails: PropertyDetailsFormType) {
 function calculateMonthlyMortgage(propertyDetails: PropertyDetailsFormType) {
   const interest = 0.002833;
   const mortgage = calculateMortgageSize(propertyDetails);
-  const time = propertyDetails.loanPeriod;
+  const time = parseInt(propertyDetails.loanPeriod);
   const monthlyMortgage =
     (mortgage * interest) / (1 - (1 + interest) ** (-12 * time));
   return monthlyMortgage;

@@ -10,13 +10,17 @@ import DownPayment from "~/components/calculator/property-investment/forms/DownP
 import PropertyPrice from "~/components/calculator/property-investment/forms/PropertyPrice";
 import { Dropdown } from "~/components/Dropdown";
 import { Heading } from "~/components/Heading";
-import InputWithLabel from "~/components/InputWithLabel";
+//import InputWithLabel from "~/components/InputWithLabel";
+// Commented out the above line because no need for input labels as of now
+// as loan period has been changed to a dropdown menu, will uncomment if
+// deemed necessary in the future
 import {
   ROUTE_CALC,
   ROUTE_CALC_PROPERTY_INVEST_FINANCIAL_DETAILS,
 } from "~/constants/routes";
 import {
   Direction,
+  loanPeriodChoice,
   PropertyDetailsFormSchema,
   propertyLocationChoice,
   propertyTypeChoice,
@@ -77,13 +81,18 @@ export default function PropertyInvestmentInputPage() {
               : ""
           }
         />
-        <InputWithLabel
+        <Dropdown
+          name={"loanPeriod"}
           label="Loan Period (years)"
-          inputMode="decimal"
-          name="loanPeriod"
-          error={errors?.loanPeriod?._errors[0]}
-          defaultValue={searchParams.get("loanPeriod") || ""}
-          required
+          initialOption={
+            searchParams.get("loanPeriod") || "Select your Loan Period"
+          }
+          items={loanPeriodChoice}
+          error={
+            errors?.loanPeriod?._errors[0]
+              ? "Please select a Period"
+              : ""
+          }
         />
         <PropertyPrice />
         <DownPayment />

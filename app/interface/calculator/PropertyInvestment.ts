@@ -15,6 +15,16 @@ export const propertyLocationChoice = [
   "Kitchener, Ontario, Canada",
 ] as const;
 
+export const loanPeriodChoice = [
+  "5",
+  "10",
+  "15",
+  "20",
+  "25",
+  "30",
+  "35",
+] as const;
+
 export const creditScoreChoice = [
   "750 - 850",
   "700 - 749",
@@ -51,6 +61,7 @@ export const PropertyDetailsFormSchema = z
   .object({
     propertyType: z.enum(propertyTypeChoice),
     propertyLocation: z.enum(propertyLocationChoice),
+    loanPeriod: z.enum(loanPeriodChoice),
     propertyPrice: preprocessStringToFloat(
       z
         .number({
@@ -77,15 +88,7 @@ export const PropertyDetailsFormSchema = z
     //       .min(0)
     //       .max(100)
     //   ),
-    loanPeriod: preprocessStringToFloat(
-      z
-        .number({
-          required_error: "Loan period is required",
-          invalid_type_error: "Loan period must be a number",
-        })
-        .nonnegative()
-        .step(1, "Please round your loan period to the nearest year")
-    ),
+
   })
   .superRefine((data, ctx) => {
     if (data.intendedDownPaymentDollars > data.propertyPrice) {

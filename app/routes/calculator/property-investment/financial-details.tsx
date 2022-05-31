@@ -142,7 +142,7 @@ export default function PropertyInvestmentInputPage() {
         <Heading>Financial Details</Heading>
         <InputWithLabel
           name={"grossIncome"}
-          label="Gross Income (CAD)"
+          label="Monthly Gross Income (CAD)"
           defaultValue={searchParams.get("grossIncome") || ""}
           required
           inputMode="decimal"
@@ -163,7 +163,7 @@ export default function PropertyInvestmentInputPage() {
         />
         <InputWithLabel
           name={"currentDebt"}
-          label="Current Debt (CAD)"
+          label="Monthly Current Debt (CAD)"
           defaultValue={searchParams.get("currentDebt") || ""}
           inputMode="decimal"
           error={errors?.currentDebt?._errors[0]}
