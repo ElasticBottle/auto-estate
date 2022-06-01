@@ -184,7 +184,7 @@ export default function ReportPage() {
             </li>
           </ul>
           <ul className="p-0 list-none">
-            <li>GST/HST: {formatCurrency(loaderData?.gst)}</li>
+            <li>PST on Mortgage Insurance: {formatCurrency(loaderData?.pstOnCMHC)}</li>
             <li>
               Title Insurance: {formatCurrency(loaderData?.titleInsurance)}
             </li>
@@ -207,15 +207,53 @@ export default function ReportPage() {
 
       <div className="flex flex-col items-center px-10 space-y-3">
         <div className="text-base font-bold text-center">
-          Total Tax benefits: {loaderData?.totalTaxBenefits}
+          Total Tax benefits over the term (5 years): {formatCurrency(loaderData?.totalTaxBenefits)}
         </div>
         <div className="flex flex-col md:justify-center md:space-x-5 md:flex-row">
-          <p className="text-base">
-            Annual Tax benefits: {loaderData?.annualTaxBenefits}
-          </p>
-          <p className="text-base">
-            One Time Tax benefits: {loaderData?.oneTimeTaxBenefits}
-          </p>
+          <ul className="p-0 list-none">
+            <li className="text-base font-bold ">
+            Annual Tax benefits: {formatCurrency(loaderData?.annualTaxBenefits)}
+            </li>
+            <li>
+            Mortgage Interest: {formatCurrency(loaderData?.mortgageInterest)}
+            </li>
+            <li>
+            HomeOwner's Insurance: {formatCurrency(loaderData?.insurance)}
+            </li>
+            <li>
+            Property Tax: {formatCurrency(loaderData?.tax)}
+            </li>
+            <li>
+            Advertising Cost: {formatCurrency(loaderData?.advertizingCost)}
+            </li>
+            <li>
+            Utilities: {formatCurrency(loaderData?.utilities)}
+            </li>
+            <li>
+            Maintenance and Management Cost: {formatCurrency(loaderData?.managementMaintenance)}
+            </li>
+            <li>
+            Working from Home Credits: {formatCurrency(loaderData?.workingFromHomeCredit)} 
+            </li>
+          </ul>
+          <ul className="p-0 list-none">
+            <li className="text-base font-bold ">
+            One Time Tax benefits: {formatCurrency(loaderData?.oneTimeTaxBenefits)}
+            </li>
+            <li>
+            First Time Home Buyer's Tax Credit: {formatCurrency(loaderData?.firstTimeHomeBuyersCredit)}
+            </li>
+            <li>
+            Moving Expenses: {formatCurrency(loaderData?.movingExpenses)}
+            </li>
+            <li>
+            Mortgage Insurance: {formatCurrency(loaderData?.mortgageInsurance)}  
+            </li>
+            <li>
+            GST/HST New Housing Rebate: {formatCurrency(loaderData?.gsthstNewHousingRebate)}
+            </li>
+          </ul>
+          
         </div>
         <Link
           to={{

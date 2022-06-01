@@ -41,9 +41,14 @@ export function calculatePropertyInvestmentReportSummaryValues(
   const propertyTaxPayments = calculatePropertyTax(propertyDetails);
   const insurancePayments = calculateInsurance(propertyDetails);
   const landTransferTax = calculateLandTransferTax(propertyDetails);
+  const maintenanceFee = calculateMaintenanceFee(propertyDetails);
+  const mortgageInsurance = calculateMortgageInsurance(propertyDetails);
+  const termInterest = calculateTermInterest(propertyDetails);
+  const firstTimeBuyerIncentive = calculatefirstTimeBuyerIncentive(propertyDetails,financialDetails)
   return {
     // todo: Fill out the values here
-    monthlyNetIncomeFromProperty: 1000,
+    monthlyNetIncomeFromProperty: (0.64 * 113 * 30) - (propertyTaxPayments +
+      insurancePayments + 283 + maintenanceFee + 200),
 
     // Monthly Cost Section
     totalMonthlyCost:
@@ -51,17 +56,17 @@ export function calculatePropertyInvestmentReportSummaryValues(
       propertyTaxPayments +
       insurancePayments +
       283 +
-      488 +
+      maintenanceFee +
       200,
     monthlyMortgage: mortgagePayments,
     propertyTax: propertyTaxPayments,
     homeOwnerInsurance: insurancePayments,
     utilityBill: 283,
-    maintenanceFee: 488,
+    maintenanceFee: maintenanceFee,
     miscFees: 200,
 
     // Monthly Revenue Section
-    averageMonthlyRevenue: 10,
+    averageMonthlyRevenue: 0.64 * 113 * 30,
     forecastedMonthlyRevenue: {
       January: 10,
       February: 10,
@@ -77,18 +82,18 @@ export function calculatePropertyInvestmentReportSummaryValues(
       December: 10,
     },
     // this is 60%
-    averageOccupancy: 0.6,
-    averageDailyRate: 10,
-    bestRevenueMonth: "March",
-    worstRevenueMonth: "December",
+    averageOccupancy: 0.64,
+    averageDailyRate: 113,
+    bestRevenueMonth: "October",
+    worstRevenueMonth: "May",
 
     // Closing Cost Section
-    closingCosts: 10,
+    closingCosts: landTransferTax + 900 + 10 + 10 + 250 + 450 + 50 + 100 +300,
     landTransferTax: landTransferTax,
-    legalFees: 10,
+    legalFees: 900,
     propertyTaxAdjustment: 10,
-    gst: 10,
-    titleInsurance: 200,
+    pstOnCMHC: mortgageInsurance * 0.07,
+    titleInsurance: 250,
     homeInspection: 450,
     otherTaxes: 50,
     interestAdjustment: 100,
@@ -110,25 +115,67 @@ export function calculatePropertyInvestmentReportSummaryValues(
     },
 
     // Tax Benefits Section
-    totalTaxBenefits: 10,
-    annualTaxBenefits: 10,
-    oneTimeTaxBenefits: 10,
+    totalTaxBenefits: ((termInterest / 5) + insurancePayments + (propertyTaxPayments * 12) + 200 + 283 + maintenanceFee + 200 + 0)*5 + (2000 + 750 + mortgageInsurance + 24000),
+    // Annual Tax breakdown
+    annualTaxBenefits: (termInterest / 5) + insurancePayments + (propertyTaxPayments * 12) + 200 + 283 + maintenanceFee + 200 + 0,
+    mortgageInterest: termInterest / 5,
+    insurance: insurancePayments,
+    tax: (propertyTaxPayments * 12),
+    advertizingCost: 200,
+    utilities: 283,
+    managementMaintenance: maintenanceFee + 200,
+    workingFromHomeCredit: 0,
+
+    // One time tax breakdown
+    oneTimeTaxBenefits: 2000 + 750 + mortgageInsurance + 24000,
+    movingExpenses: 2000,
+    firstTimeHomeBuyersCredit: 750,
+    mortgageInsurance: mortgageInsurance,
+    gsthstNewHousingRebate: 24000,
 
     // gov grant section
-    maxGovernmentGrants: 45000,
+    maxGovernmentGrants: firstTimeBuyerIncentive + 35000,
     homeBuyerGrant: 35000,
-    firstTimeBuyerIncentive: 10000,
+    firstTimeBuyerIncentive: firstTimeBuyerIncentive,
   };
 }
 
-function calculateMortgageSize(propertyDetails: PropertyDetailsFormType) {
-  // TODO: Calculation for mortgage size;
-  const size =
-    propertyDetails.propertyPrice - propertyDetails.intendedDownPaymentDollars;
-  return size;
+// Functions that calculate the values
+
+
+function calculateMortgageInsurance(propertyDetails: PropertyDetailsFormType) {
+  const ltv = 1 - (propertyDetails.intendedDownPaymentDollars / propertyDetails.propertyPrice);
+  const price = propertyDetails.propertyPrice;
+  const downPayment = propertyDetails.intendedDownPaymentDollars;
+  const loan = price - downPayment;
+  let insurance = 0;
+  if (ltv >= 0.95) {
+    insurance = loan * 0.04;
+  } 
+  else if (ltv < 0.95 && ltv >= 0.90) {
+    insurance = loan * 0.031;
+  }
+  else if (ltv < 0.90 && ltv >= 0.85) {
+    insurance = loan * 0.028;
+  }
+  else if (ltv < 0.85 && ltv >= 0.80) {
+    insurance = loan * 0.024;
+  }
+  else {
+    insurance = 0;
+  }
+  return insurance;
 }
 
-// Functions that calculate the values
+// Functions that calculate the values for the fields in the report
+
+function calculateMortgageSize(propertyDetails: PropertyDetailsFormType) {
+  // TODO: Calculation for mortgage size;
+  const insurance = calculateMortgageInsurance(propertyDetails)
+  const size =
+    propertyDetails.propertyPrice - propertyDetails.intendedDownPaymentDollars + insurance;
+  return size;
+}
 
 function calculateMonthlyMortgage(propertyDetails: PropertyDetailsFormType) {
   const interest = 0.002833;
@@ -150,6 +197,14 @@ function calculatePropertyTax(propertyDetails: PropertyDetailsFormType) {
   const propertyTax =
     (propertyTaxMapping[propertyDetails.propertyLocation] * price) / 12;
   return propertyTax;
+}
+
+// Maintenance is fee is calculated using the 1% rule
+// Which is that the annual maint fees is 1% of the purchase price of house
+function calculateMaintenanceFee(propertyDetails: PropertyDetailsFormType) {
+  const price = propertyDetails.propertyPrice;
+  const maintenanceFee = (price * 0.01) / 12;
+  return maintenanceFee;
 }
 
 const propertyInsuranceMapping = {
@@ -184,4 +239,41 @@ function calculateLandTransferTax(propertyDetails: PropertyDetailsFormType) {
       (price - 2000000) * 0.025;
   }
   return tax;
+}
+
+function calculateTermInterest(propertyDetails: PropertyDetailsFormType) {
+  let mortgage = calculateMortgageSize(propertyDetails);
+  const interest = 0.002833;
+  const mortgagePayments = calculateMonthlyMortgage(propertyDetails)
+  let month = 1;
+  let termInterest = 0;
+  while (month <= 60) {
+    termInterest = termInterest + (mortgage * interest);
+    mortgage = mortgage - (mortgagePayments - (mortgage * interest));
+    month++;
+  }
+  return termInterest;
+}
+
+function calculatefirstTimeBuyerIncentive(propertyDetails: PropertyDetailsFormType,financialDetails: FinancialDetailsFormType) {
+  const propertyType = propertyDetails.propertyType;
+  const income = financialDetails.grossIncome;
+  const price = propertyDetails.propertyPrice;
+  const downPayment = propertyDetails.intendedDownPaymentDollars;
+  const loan = price - downPayment;
+  const newDownPayment = downPayment + 0.05*price;
+  const ltv = 1 - (newDownPayment / price);
+  let incentive = 0;
+  if (propertyType === "I will live there" || propertyType === "I will live there and rent out part of it") {
+    if ((loan <= 48*income) && (ltv > 0.8) && (income <= 10000)){
+      incentive = 0.05 * price;
+    }
+    else {
+      incentive = 0;
+    }
+  }
+  else{
+    incentive = 0;
+  }
+  return incentive;
 }
