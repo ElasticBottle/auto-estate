@@ -15,7 +15,10 @@ import {
   ROUTE_CALC_PROPERTY_INVEST_GOVERNMENT_GRANTS,
   ROUTE_CALC_PROPERTY_INVEST_TAX_BENEFITS,
 } from "~/constants/routes";
-import { Direction } from "~/interface/calculator/PropertyInvestment";
+import {
+  Direction,
+  propertyTypeChoice,
+} from "~/interface/calculator/PropertyInvestment";
 import { calculatePropertyInvestmentReportSummaryValues } from "~/lib/calculator/propertyInvestment/calculatePropertyInvestmentReportSummaryValues";
 import {
   formatCurrency,
@@ -35,6 +38,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 
   return json({
     ...result,
+    propertyDetails: propertyDetails.data,
   });
 };
 
@@ -42,7 +46,10 @@ export default function ReportPage() {
   const loaderData = useLoaderData();
   const location = useLocation();
   const [, setDirection] = useAtom(pageDirectionAtom);
-  // TODO: Prevent the dissappearing of details when playing fade animation to another page
+  const [hasRevenue, setHasRevenue] = React.useState(
+    loaderData?.propertyDetails.propertyType !== propertyTypeChoice[1]
+  );
+  // TODO: Prevent the disappearing of details when playing fade animation to another page
 
   return (
     <article className="space-y-10">
@@ -120,52 +127,61 @@ export default function ReportPage() {
             <li>Misc Fees: {formatCurrency(loaderData?.miscFees)}</li>
           </ul>
         </div>
-        <div>
-          <ReactCharts
-            className="aspect-square"
-            option={{
-              type: "bar",
-              data: {
-                labels: Object.keys(loaderData?.forecastedMonthlyRevenue || []),
-                datasets: [
-                  {
-                    label: "Forecasted Monthly Revenue",
-                    data: Object.values(
-                      loaderData?.forecastedMonthlyRevenue || []
-                    ),
-                    ...defaultGraphDataOptions({ colorCount: 1 }),
-                  },
-                ],
-              },
-              options: {
-                ...defaultGraphOptions,
-                plugins: {
-                  legend: {
-                    position: "top",
-                  },
-                  title: {
-                    display: true,
-                    text: "Monthly Revenue Forecast",
+        {hasRevenue && (
+          <div>
+            <ReactCharts
+              className="aspect-square"
+              option={{
+                type: "bar",
+                data: {
+                  labels: Object.keys(
+                    loaderData?.forecastedMonthlyRevenue || []
+                  ),
+                  datasets: [
+                    {
+                      label: "Forecasted Monthly Revenue",
+                      data: Object.values(
+                        loaderData?.forecastedMonthlyRevenue || []
+                      ),
+                      ...defaultGraphDataOptions({ colorCount: 1 }),
+                    },
+                  ],
+                },
+                options: {
+                  ...defaultGraphOptions,
+                  plugins: {
+                    legend: {
+                      position: "top",
+                    },
+                    title: {
+                      display: true,
+                      text: "Monthly Revenue Forecast",
+                    },
                   },
                 },
-              },
-            }}
-          />
-          <ul className="p-0 list-none">
-            <li className="text-base font-bold ">
-              Average Monthly Revenue:{" "}
-              {formatCurrency(loaderData?.averageMonthlyRevenue)}
-            </li>
-            <li>
-              Average Occupancy: {formatPerc(loaderData?.averageOccupancy)}
-            </li>
-            <li>
-              Average Daily Rate: {formatCurrency(loaderData?.averageDailyRate)}
-            </li>
-            <li>Month With Highest Revenue: {loaderData?.bestRevenueMonth}</li>
-            <li>Month With Lowest Revenue: {loaderData?.worstRevenueMonth}</li>
-          </ul>
-        </div>
+              }}
+            />
+            <ul className="p-0 list-none">
+              <li className="text-base font-bold ">
+                Average Monthly Revenue:{" "}
+                {formatCurrency(loaderData?.averageMonthlyRevenue)}
+              </li>
+              <li>
+                Average Occupancy: {formatPerc(loaderData?.averageOccupancy)}
+              </li>
+              <li>
+                Average Daily Rate:{" "}
+                {formatCurrency(loaderData?.averageDailyRate)}
+              </li>
+              <li>
+                Month With Highest Revenue: {loaderData?.bestRevenueMonth}
+              </li>
+              <li>
+                Month With Lowest Revenue: {loaderData?.worstRevenueMonth}
+              </li>
+            </ul>
+          </div>
+        )}
       </div>
 
       <div className="flex-col items-center px-10">
@@ -184,7 +200,9 @@ export default function ReportPage() {
             </li>
           </ul>
           <ul className="p-0 list-none">
-            <li>PST on Mortgage Insurance: {formatCurrency(loaderData?.pstOnCMHC)}</li>
+            <li>
+              PST on Mortgage Insurance: {formatCurrency(loaderData?.pstOnCMHC)}
+            </li>
             <li>
               Title Insurance: {formatCurrency(loaderData?.titleInsurance)}
             </li>
@@ -207,53 +225,56 @@ export default function ReportPage() {
 
       <div className="flex flex-col items-center px-10 space-y-3">
         <div className="text-base font-bold text-center">
-          Total Tax benefits over the term (5 years): {formatCurrency(loaderData?.totalTaxBenefits)}
+          Total Tax benefits over the term (5 years):{" "}
+          {formatCurrency(loaderData?.totalTaxBenefits)}
         </div>
         <div className="flex flex-col md:justify-center md:space-x-5 md:flex-row">
           <ul className="p-0 list-none">
             <li className="text-base font-bold ">
-            Annual Tax benefits: {formatCurrency(loaderData?.annualTaxBenefits)}
+              Annual Tax benefits:{" "}
+              {formatCurrency(loaderData?.annualTaxBenefits)}
             </li>
             <li>
-            Mortgage Interest: {formatCurrency(loaderData?.mortgageInterest)}
+              Mortgage Interest: {formatCurrency(loaderData?.mortgageInterest)}
             </li>
             <li>
-            HomeOwner's Insurance: {formatCurrency(loaderData?.insurance)}
+              HomeOwner's Insurance: {formatCurrency(loaderData?.insurance)}
+            </li>
+            <li>Property Tax: {formatCurrency(loaderData?.tax)}</li>
+            <li>
+              Advertising Cost: {formatCurrency(loaderData?.advertizingCost)}
+            </li>
+            <li>Utilities: {formatCurrency(loaderData?.utilities)}</li>
+            <li>
+              Maintenance and Management Cost:{" "}
+              {formatCurrency(loaderData?.managementMaintenance)}
             </li>
             <li>
-            Property Tax: {formatCurrency(loaderData?.tax)}
-            </li>
-            <li>
-            Advertising Cost: {formatCurrency(loaderData?.advertizingCost)}
-            </li>
-            <li>
-            Utilities: {formatCurrency(loaderData?.utilities)}
-            </li>
-            <li>
-            Maintenance and Management Cost: {formatCurrency(loaderData?.managementMaintenance)}
-            </li>
-            <li>
-            Working from Home Credits: {formatCurrency(loaderData?.workingFromHomeCredit)} 
+              Working from Home Credits:{" "}
+              {formatCurrency(loaderData?.workingFromHomeCredit)}
             </li>
           </ul>
           <ul className="p-0 list-none">
             <li className="text-base font-bold ">
-            One Time Tax benefits: {formatCurrency(loaderData?.oneTimeTaxBenefits)}
+              One Time Tax benefits:{" "}
+              {formatCurrency(loaderData?.oneTimeTaxBenefits)}
             </li>
             <li>
-            First Time Home Buyer's Tax Credit: {formatCurrency(loaderData?.firstTimeHomeBuyersCredit)}
+              First Time Home Buyer's Tax Credit:{" "}
+              {formatCurrency(loaderData?.firstTimeHomeBuyersCredit)}
             </li>
             <li>
-            Moving Expenses: {formatCurrency(loaderData?.movingExpenses)}
+              Moving Expenses: {formatCurrency(loaderData?.movingExpenses)}
             </li>
             <li>
-            Mortgage Insurance: {formatCurrency(loaderData?.mortgageInsurance)}  
+              Mortgage Insurance:{" "}
+              {formatCurrency(loaderData?.mortgageInsurance)}
             </li>
             <li>
-            GST/HST New Housing Rebate: {formatCurrency(loaderData?.gsthstNewHousingRebate)}
+              GST/HST New Housing Rebate:{" "}
+              {formatCurrency(loaderData?.gsthstNewHousingRebate)}
             </li>
           </ul>
-          
         </div>
         <Link
           to={{
