@@ -21,6 +21,7 @@ import {
 import {
   Direction,
   loanPeriodChoice,
+  firstTimeHomeBuyerChoice,
   PropertyDetailsFormSchema,
   propertyLocationChoice,
   propertyTypeChoice,
@@ -57,7 +58,7 @@ export default function PropertyInvestmentInputPage() {
 
         <Dropdown
           name={"propertyType"}
-          label="Property Type"
+          label="How do you Intend to use this property?"
           initialOption={
             searchParams.get("propertyType") || "Select a Property Type"
           }
@@ -96,6 +97,19 @@ export default function PropertyInvestmentInputPage() {
         />
         <PropertyPrice />
         <DownPayment />
+        <Dropdown
+          name={"firstTimeHomeBuyer"}
+          label="Are you a First Time Home Buyer?"
+          initialOption={
+            searchParams.get("firstTimeHomeBuyer") || "Select Yes or No"
+          }
+          items={firstTimeHomeBuyerChoice}
+          error={
+            errors?.firstTimeHomeBuyer?._errors[0]
+              ? "Please select an option"
+              : ""
+          }
+        />
 
         <div className="flex justify-end w-full space-x-3">
           <Link

@@ -9,22 +9,23 @@ export function calculateTaxBenefitValues(
   propertyDetails: PropertyDetailsFormType,
   financialDetails: FinancialDetailsFormType
 ) {
+  const income = (financialDetails.grossIncome)*12;
   return {
-    annualPropertyIncome: 1000,
-    annualOtherIncome: 4000,
-    totalAnnualIncome: 5000,
-    annualTaxBeforeDeductibles: 2100,
-    eligibleDeductions: 2000,
-    netAnnualIncome: 4900,
+    annualPropertyIncome:38400,
+    annualOtherIncome: income,
+    totalAnnualIncome: 38400 + income,
+    annualTaxBeforeDeductibles: 55557,
+    eligibleDeductions: 23400,
+    netAnnualIncome: 113242,
     // this is 10%
-    netIncomeChangePercentage: 0.1,
+    netIncomeChangePercentage: 0.1011,
     // should be totalAnnualIncome - annualTaxBeforeDeductibles?
-    netIncomeBeforeDeductibles: 2900,
+    netIncomeBeforeDeductibles: 38400 + income - 55557,
     // should be the same as netAnnual Income?
-    netIncomeAfterDeductibles: 4900,
+    netIncomeAfterDeductibles: 113242,
     // should be the same as annualTaxBeforeDeductibles?
-    taxedBillBeforeDeductibles: 2100,
+    taxedBillBeforeDeductibles: 55557,
     // should be annualTaxBeforeDeductibles - eligibleDeductions??
-    taxedBillAfterDeductibles: 100,
+    taxedBillAfterDeductibles: 45158,
   };
 }

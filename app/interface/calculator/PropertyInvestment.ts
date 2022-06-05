@@ -25,6 +25,11 @@ export const loanPeriodChoice = [
   "35",
 ] as const;
 
+export const firstTimeHomeBuyerChoice = [
+  "Yes",
+  "No",
+] as const;
+
 export const creditScoreChoice = [
   "750 - 850",
   "700 - 749",
@@ -78,6 +83,7 @@ export const PropertyDetailsFormSchema = z
         })
         .nonnegative()
     ),
+    firstTimeHomeBuyer: z.enum(firstTimeHomeBuyerChoice),
     //   intendedDownPaymentPercentage: preprocessStringToFloat(
     //     z
     //       .number({

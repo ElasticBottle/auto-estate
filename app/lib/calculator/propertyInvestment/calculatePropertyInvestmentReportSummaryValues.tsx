@@ -47,7 +47,7 @@ export function calculatePropertyInvestmentReportSummaryValues(
   const firstTimeBuyerIncentive = calculatefirstTimeBuyerIncentive(propertyDetails,financialDetails)
   return {
     // todo: Fill out the values here
-    monthlyNetIncomeFromProperty: (0.64 * 113 * 30) - (propertyTaxPayments +
+    monthlyNetIncomeFromProperty: (0.64 * 113 * 30) - (mortgagePayments + propertyTaxPayments +
       insurancePayments + 283 + maintenanceFee + 200),
 
     // Monthly Cost Section
@@ -92,7 +92,7 @@ export function calculatePropertyInvestmentReportSummaryValues(
     landTransferTax: landTransferTax,
     legalFees: 900,
     propertyTaxAdjustment: 10,
-    pstOnCMHC: mortgageInsurance * 0.07,
+    pstOnCMHC: mortgageInsurance * 0.08,
     titleInsurance: 250,
     homeInspection: 450,
     otherTaxes: 50,
@@ -101,17 +101,20 @@ export function calculatePropertyInvestmentReportSummaryValues(
     // ! Note, these stuff might need tweaking, but feel free to do calculation base on 30 years and I can hook them up in the right place later on
 
     // ROI section
-    roi: 5.55,
-    averageYearlyReturn: 0.0588,
+    roi: 1.95,
+    averageYearlyReturn: 0.1668,
     averageInflation: 0.0196,
-    realYearlyReturn: 0.0392,
+    realYearlyReturn: 0.1472,
     capRate: 0.05,
     propertyPriceOverYears: {
-      2018: 100,
-      2019: 120,
-      2020: 200,
-      2021: 225,
-      2022: 201,
+      2015: 384635,
+      2016: 428495,
+      2017: 583144,
+      2018: 582851,
+      2019: 585668,
+      2020: 679728,
+      2021: 899460,
+      2022: 1132637,
     },
 
     // Tax Benefits Section
@@ -149,7 +152,10 @@ function calculateMortgageInsurance(propertyDetails: PropertyDetailsFormType) {
   const downPayment = propertyDetails.intendedDownPaymentDollars;
   const loan = price - downPayment;
   let insurance = 0;
-  if (ltv >= 0.95) {
+  if (price >= 1000000) {
+    insurance = 0;
+  }
+  else if (ltv >= 0.95) {
     insurance = loan * 0.04;
   } 
   else if (ltv < 0.95 && ltv >= 0.90) {
@@ -264,7 +270,7 @@ function calculatefirstTimeBuyerIncentive(propertyDetails: PropertyDetailsFormTy
   const newDownPayment = downPayment + 0.05*price;
   const ltv = 1 - (newDownPayment / price);
   let incentive = 0;
-  if (propertyType === "I will live there" || propertyType === "I will live there and rent out part of it") {
+  if ((propertyType === "I will live there" || propertyType === "I will live there and rent out part of it") && propertyDetails.firstTimeHomeBuyer === "Yes") {
     if ((loan <= 48*income) && (ltv > 0.8) && (income <= 10000)){
       incentive = 0.05 * price;
     }

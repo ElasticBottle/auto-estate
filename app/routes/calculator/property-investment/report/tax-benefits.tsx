@@ -188,11 +188,11 @@ export default function TaxBenefitsPage() {
             <tbody>
               <Tr>
                 <Th isSticky>Rental Income Deductions</Th>
-                <Td>Blue</Td>
-                <Td>Blue</Td>
-                <Td>Blue</Td>
-                <Td>Blue</Td>
-                <Td>Blue</Td>
+                <Td>CA$ 19781</Td>
+                <Td>CA$ 26028</Td>
+                <Td>CA$ 0</Td>
+                <Td>Includes all rental expenses and mortgage interest</Td>
+                <Td>Form T776, line 8299</Td>
               </Tr>
               <Tr>
                 <Th isSticky>CMHC Insurance</Th>

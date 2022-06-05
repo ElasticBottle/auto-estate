@@ -15,11 +15,11 @@ export default function ROI() {
   const loaderData = useLoaderData();
   const location = useLocation();
   const [, setDirection] = useAtom(pageDirectionAtom);
-  const [years, setYears] = React.useState(30);
+  const [years, setYears] = React.useState(7);
   return (
     <div className="flex flex-col items-center px-10 space-y-7">
       <div className="text-base font-bold text-center">
-        ROI: {formatPerc(loaderData?.roi)}% Over past {years} years
+        ROI: {formatPerc(loaderData?.roi)} Over past {years} years
       </div>
       {/* <input
         className="my-3 "
@@ -68,7 +68,7 @@ export default function ROI() {
                 },
                 title: {
                   display: true,
-                  text: "Price of house (in thousand) over time",
+                  text: "Price of the property over time",
                 },
               },
             },
