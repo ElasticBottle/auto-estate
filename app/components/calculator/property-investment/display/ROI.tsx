@@ -19,7 +19,7 @@ export default function ROI() {
   return (
     <div className="flex flex-col items-center px-10 space-y-7">
       <div className="text-base font-bold text-center">
-        ROI: {formatPerc(loaderData?.roi)}% Over past {years} years
+        ROI: {formatPerc(loaderData?.roi)} Over past {years} years
       </div>
       {/* <input
         className="my-3 "

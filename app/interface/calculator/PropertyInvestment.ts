@@ -88,7 +88,6 @@ export const PropertyDetailsFormSchema = z
     //       .min(0)
     //       .max(100)
     //   ),
-
   })
   .superRefine((data, ctx) => {
     if (data.intendedDownPaymentDollars > data.propertyPrice) {
