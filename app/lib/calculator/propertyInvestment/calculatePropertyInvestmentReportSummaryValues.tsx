@@ -37,14 +37,16 @@ export function calculatePropertyInvestmentReportSummaryValues(
 
   // TODO: Do the calculations here, edit function to pass in params if you need.
   // ! The types of the parameter are given by the value after ":" above
+  const price = propertyDetails.propertyPrice;
   const mortgagePayments = calculateMonthlyMortgage(propertyDetails);
   const propertyTaxPayments = calculatePropertyTax(propertyDetails);
   const insurancePayments = calculateInsurance(propertyDetails);
-  const landTransferTax = calculateLandTransferTax(propertyDetails);
+  const landTransferTax = calculateFinalLandTransferTax(propertyDetails);
   const maintenanceFee = calculateMaintenanceFee(propertyDetails);
   const mortgageInsurance = calculateMortgageInsurance(propertyDetails);
   const termInterest = calculateTermInterest(propertyDetails);
   const firstTimeBuyerIncentive = calculatefirstTimeBuyerIncentive(propertyDetails,financialDetails)
+  let ROI = (price - (0.9354 * 0.7536 * 1.0065 * 0.9686 * 0.8665 * 0.7627 * 0.7971 * price)) / (0.9354 * 0.7536 * 1.0065 * 0.9686 * 0.8665 * 0.7627 * 0.7971 * price)
   return {
     // todo: Fill out the values here
     monthlyNetIncomeFromProperty: (0.64 * 113 * 30) - (mortgagePayments + propertyTaxPayments +
@@ -88,33 +90,33 @@ export function calculatePropertyInvestmentReportSummaryValues(
     worstRevenueMonth: "May",
 
     // Closing Cost Section
-    closingCosts: landTransferTax + 900 + 10 + 10 + 250 + 450 + 50 + 100 +300,
+    closingCosts: landTransferTax + 900 + (mortgageInsurance * 0.08) + 900 + 100 + 200 + 1000,
     landTransferTax: landTransferTax,
     legalFees: 900,
-    propertyTaxAdjustment: 10,
+    estoppelCertificateFees: 100,
+    governmentRegistrationFees: 200,
     pstOnCMHC: mortgageInsurance * 0.08,
     titleInsurance: 250,
     homeInspection: 450,
-    otherTaxes: 50,
-    interestAdjustment: 100,
     homeAppraisal: 300,
+    other: 300,
     // ! Note, these stuff might need tweaking, but feel free to do calculation base on 30 years and I can hook them up in the right place later on
 
     // ROI section
-    roi: 1.95,
-    averageYearlyReturn: 0.1668,
+    roi: ROI,
+    averageYearlyReturn: (1+ROI)**(1/7) - 1,
     averageInflation: 0.0196,
-    realYearlyReturn: 0.1472,
+    realYearlyReturn: ((1+ROI)**(1/7) - 1) - 0.0196,
     capRate: 0.05,
     propertyPriceOverYears: {
-      2015: 384635,
-      2016: 428495,
-      2017: 583144,
-      2018: 582851,
-      2019: 585668,
-      2020: 679728,
-      2021: 899460,
-      2022: 1132637,
+      2015: Math.round(0.9354 * 0.7536 * 1.0065 * 0.9686 * 0.8665 * 0.7627 * 0.7971 * price),
+      2016: Math.round(0.7536 * 1.0065 * 0.9686 * 0.8665 * 0.7627 * 0.7971 * price),
+      2017: Math.round(1.0065 * 0.9686 * 0.8665 * 0.7627 * 0.7971 * price),
+      2018: Math.round(0.9686 * 0.8665 * 0.7627 * 0.7971 * price),
+      2019: Math.round(0.8665 * 0.7627 * 0.7971 * price),
+      2020: Math.round(0.7627 * 0.7971 * price),
+      2021: Math.round(0.7971 * price),
+      2022: price,
     },
 
     // Tax Benefits Section
@@ -164,7 +166,7 @@ function calculateMortgageInsurance(propertyDetails: PropertyDetailsFormType) {
   else if (ltv < 0.90 && ltv >= 0.85) {
     insurance = loan * 0.028;
   }
-  else if (ltv < 0.85 && ltv >= 0.80) {
+  else if (ltv < 0.85 && ltv > 0.80) {
     insurance = loan * 0.024;
   }
   else {
@@ -243,6 +245,23 @@ function calculateLandTransferTax(propertyDetails: PropertyDetailsFormType) {
       150000 * 0.015 +
       1600000 * 0.02 +
       (price - 2000000) * 0.025;
+  }
+  return tax;
+}
+
+function calculateFinalLandTransferTax(propertyDetails: PropertyDetailsFormType) {
+  const price = propertyDetails.propertyPrice;
+  const LandTransferTax = calculateLandTransferTax(propertyDetails);
+  let tax = 0;
+  if (propertyDetails.firstTimeHomeBuyer === "Yes") {
+    if (price <= 368333) {
+      tax = 0;
+    } else {
+      tax = LandTransferTax - 4000;
+    }
+  }
+  else {
+    tax= LandTransferTax;
   }
   return tax;
 }

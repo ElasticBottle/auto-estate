@@ -53,9 +53,10 @@ export default function ReportPage() {
 
   return (
     <article className="space-y-10">
-      <h1>Your investment Evaluation Report</h1>
+      <h1>Your Investment Evaluation Report</h1>
+      {hasRevenue && (
       <p className="text-base font-bold">
-        Monthly Net Operating Income from property:{" "}
+        Monthly Net Income from property:{" "}
         <span
           className={`${classNames({
             "text-green-500": loaderData?.monthlyNetIncomeFromProperty > 0,
@@ -65,9 +66,14 @@ export default function ReportPage() {
           {formatCurrency(loaderData?.monthlyNetIncomeFromProperty)}
         </span>
       </p>
-
+      )}
       <div className="flex flex-col justify-between p-5 px-10 space-y-5 border-2 border-gray-600 rounded-lg md:space-y-0 md:flex-row md:justify-evenly md:items-start">
         <div>
+        <ul className="p-0 list-none">
+            <li className="text-base font-bold ">
+              Total Monthly Cost: {formatCurrency(loaderData?.totalMonthlyCost)}
+            </li>
+        </ul>
           <ReactCharts
             option={{
               type: "doughnut",
@@ -75,7 +81,8 @@ export default function ReportPage() {
                 labels: [
                   "Monthly Mortgage",
                   "Property Tax",
-                  "Homeowner's Utility Bill",
+                  "Homeowner's Insurance",
+                  "Utility Bill",
                   "Maintenance Fees",
                   "Misc Fees",
                 ],
@@ -109,9 +116,6 @@ export default function ReportPage() {
             }}
           />
           <ul className="p-0 list-none">
-            <li className="text-base font-bold ">
-              Total Monthly Cost: {formatCurrency(loaderData?.totalMonthlyCost)}
-            </li>
             <li>
               Monthly Mortgage: {formatCurrency(loaderData?.monthlyMortgage)}
             </li>
@@ -129,6 +133,12 @@ export default function ReportPage() {
         </div>
         {hasRevenue && (
           <div>
+            <ul className="p-0 list-none">
+              <li className="text-base font-bold ">
+                Average Monthly Revenue:{" "}
+                {formatCurrency(loaderData?.averageMonthlyRevenue)}
+              </li>
+            </ul>
             <ReactCharts
               className="aspect-square"
               option={{
@@ -162,10 +172,6 @@ export default function ReportPage() {
               }}
             />
             <ul className="p-0 list-none">
-              <li className="text-base font-bold ">
-                Average Monthly Revenue:{" "}
-                {formatCurrency(loaderData?.averageMonthlyRevenue)}
-              </li>
               <li>
                 Average Occupancy: {formatPerc(loaderData?.averageOccupancy)}
               </li>
@@ -189,35 +195,51 @@ export default function ReportPage() {
           Estimated Closing Cost: {formatCurrency(loaderData?.closingCosts)}
         </div>
         <div className="flex flex-col md:justify-center md:flex-row md:space-x-5">
-          <ul className="p-0 list-none">
-            <li>
-              Land Transfer Tax: {formatCurrency(loaderData?.landTransferTax)}
-            </li>
-            <li>Legal Fees: {formatCurrency(loaderData?.legalFees)}</li>
-            <li>
-              Property Tax Adjustment:{" "}
-              {formatCurrency(loaderData?.propertyTaxAdjustment)}
-            </li>
-          </ul>
-          <ul className="p-0 list-none">
-            <li>
-              PST on Mortgage Insurance: {formatCurrency(loaderData?.pstOnCMHC)}
-            </li>
-            <li>
-              Title Insurance: {formatCurrency(loaderData?.titleInsurance)}
-            </li>
-            <li>
-              Home Inspection: {formatCurrency(loaderData?.homeInspection)}
-            </li>
-          </ul>
-          <ul className="p-0 list-none">
-            <li>Other Taxes: {formatCurrency(loaderData?.otherTaxes)}</li>
-            <li>
-              Interest Adjustment:{" "}
-              {formatCurrency(loaderData?.interestAdjustment)}
-            </li>
-            <li>Home Appraisal: {formatCurrency(loaderData?.homeAppraisal)}</li>
-          </ul>
+          <ReactCharts
+            option={{
+              type: "doughnut",
+              data: {
+                labels: [
+                  "Land Transfer Tax",
+                  "PST on Mortgage Insurance",
+                  "Legal Fees",
+                  "Title Insurance",
+                  "Home Inspection",
+                  "Home Appraisal",
+                  "Other"
+                  
+                ],
+                datasets: [
+                  {
+                    label: "Closing Cost breakdown",
+                    data: [
+                      loaderData?.landTransferTax,
+                      loaderData?.pstOnCMHC,
+                      loaderData?.legalFees,
+                      loaderData?.titleInsurance,
+                      loaderData?.homeInspection,
+                      loaderData?.homeAppraisal,
+                      loaderData?.other,
+                      
+                    ],
+                    ...defaultGraphDataOptions({ colorCount: 7 }),
+                  },
+                ],
+              },
+              options: {
+                ...defaultGraphOptions,
+                plugins: {
+                  legend: {
+                    position: "bottom",
+                  },
+                  title: {
+                    display: true,
+                    text: "Closing Cost Breakdown",
+                  },
+                },
+              },
+            }}
+          />
         </div>
       </div>
 

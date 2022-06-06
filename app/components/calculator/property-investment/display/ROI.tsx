@@ -7,6 +7,9 @@ import {
   defaultGraphDataOptions,
   defaultGraphOptions,
 } from "~/constants/graph";
+import {
+  propertyTypeChoice,
+} from "~/interface/calculator/PropertyInvestment";
 import { ROUTE_CALC_PROPERTY_INVEST_ROI_ANALYSIS } from "~/constants/routes";
 import { Direction } from "~/interface/calculator/PropertyInvestment";
 import { formatPerc } from "~/lib/utils";
@@ -16,6 +19,9 @@ export default function ROI() {
   const location = useLocation();
   const [, setDirection] = useAtom(pageDirectionAtom);
   const [years, setYears] = React.useState(7);
+  const [hasRevenue, setHasRevenue] = React.useState(
+    loaderData?.propertyDetails.propertyType !== propertyTypeChoice[1]
+  );
   return (
     <div className="flex flex-col items-center px-10 space-y-7">
       <div className="text-base font-bold text-center">
@@ -36,16 +42,18 @@ export default function ROI() {
       <div className="flex flex-col md:flex-row md:justify-center md:space-x-5">
         <ul className="p-0 list-none">
           <li>
-            Average Yearly Return: :{" "}
+            Average Yearly Return: {" "}
             {formatPerc(loaderData?.averageYearlyReturn)}
           </li>
           <li>
-            Average Inflation: : {formatPerc(loaderData?.averageInflation)}
+            Average Inflation: {formatPerc(loaderData?.averageInflation)}
           </li>
           <li>
-            Real Yearly Return: : {formatPerc(loaderData?.realYearlyReturn)}
+            Real Yearly Return: {formatPerc(loaderData?.realYearlyReturn)}
           </li>
-          <li>Cap Rate: : {formatPerc(loaderData?.capRate)}</li>
+          {hasRevenue && (
+          <li>Cap Rate: {formatPerc(loaderData?.capRate)}</li>
+          )}
         </ul>
         <ReactCharts
           option={{
