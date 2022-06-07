@@ -1,9 +1,29 @@
 import { useLoaderData } from "@remix-run/react";
+import { LoaderFunction, json } from "@remix-run/server-runtime";
 import React from "react";
 import { ReactCharts } from "~/components/Graph";
 import { Td, Th, Tr } from "~/components/Tables";
 import { defaultGraphOptions } from "~/constants/graph";
 import { roiAnalysisInvestmentType } from "~/interface/calculator/PropertyInvestment";
+import { calculatePropertyInvestmentReportSummaryValues } from "~/lib/calculator/propertyInvestment/calculatePropertyInvestmentReportSummaryValues";
+import { calculateRoiAnalysisValues } from "~/lib/calculator/propertyInvestment/calculateRoiAnalysisValues";
+import { formatCurrency, formatPerc, getPropertyInvestmentCalculatorDetails } from "~/lib/utils";
+
+export const loader: LoaderFunction = async ({ request }) => {
+  const { userDetails, propertyDetails, financialDetails } =
+    getPropertyInvestmentCalculatorDetails(request.url);
+
+  const result = calculateRoiAnalysisValues(
+    userDetails.data,
+    propertyDetails.data,
+    financialDetails.data
+  );
+
+  return json({
+    ...result,
+    propertyDetails: propertyDetails.data,
+  });
+};
 
 export default function RoiAnalysis() {
   const loaderData = useLoaderData();
@@ -17,7 +37,7 @@ export default function RoiAnalysis() {
           over the past few years in comparison to some other popular
           investments. Note that for all the other investments we take the base
           investment to be the down payment and the yearly principal paid for
-          the mortgage to be the yearly investment into the asset class.
+          the mortgage to be the yearly investment into the asset class
         </p>
       </div>
       <div className="overflow-x-auto w-full">
@@ -33,35 +53,31 @@ export default function RoiAnalysis() {
           <tbody>
             <Tr>
               <Th isSticky>Gross ROI (Capital Gains)</Th>
-              <Td>44.93%</Td>
-              <Td>68%</Td>
-              <Td>32.22%</Td>
-              <Td>16%</Td>
-              <Td>0%</Td>
+              <Td>{formatPerc(loaderData?.roi)}</Td>
+              <Td>98.36%</Td>
+              <Td>39.14%</Td>
+              <Td>69.58%</Td>
             </Tr>
             <Tr>
-              <Th isSticky>Annual Income</Th>
-              <Td>38400</Td>
-              <Td>7500</Td>
-              <Td>12500</Td>
-              <Td>0</Td>
-              <Td>3000</Td>
+              <Th isSticky>Capital Gains on Down Payment over term</Th>
+              <Td>{formatCurrency(loaderData?.yourInvestment)}</Td>
+              <Td>{formatCurrency(loaderData?.spInvestment)}</Td>
+              <Td>{formatCurrency(loaderData?.tsxInvestment)}</Td>
+              <Td>{formatCurrency(loaderData?.reitInvestment)}</Td>
             </Tr>
             <Tr>
-              <Th isSticky>First Time Home Capital Gains over term</Th>
-              <Td>44930</Td>
-              <Td>64690</Td>
-              <Td>32200</Td>
-              <Td>16000</Td>
-              <Td>0</Td>
+              <Th isSticky>Average Annual Income</Th>
+              <Td>{formatCurrency(loaderData?.incomeInvestment)}</Td>
+              <Td>{formatCurrency(loaderData?.incomeSP)}</Td>
+              <Td>{formatCurrency(loaderData?.incomeTSX)}</Td>
+              <Td>{formatCurrency(loaderData?.incomeREIT)}</Td>
             </Tr>
             <Tr>
               <Th isSticky>EBITA over term</Th>
-              <Td>236930</Td>
-              <Td>102190</Td>
-              <Td>94700</Td>
-              <Td>16000</Td>
-              <Td>15000</Td>
+              <Td>{formatCurrency(loaderData?.ebitaInvestment)}</Td>
+              <Td>{formatCurrency(loaderData?.ebitaSP)}</Td>
+              <Td>{formatCurrency(loaderData?.ebitaTSX)}</Td>
+              <Td>{formatCurrency(loaderData?.ebitaREIT)}</Td>
             </Tr>
             <Tr>
               <Th isSticky>Tax Obligation</Th>
@@ -69,12 +85,10 @@ export default function RoiAnalysis() {
               <Td>30657</Td>
               <Td>28410</Td>
               <Td>0</Td>
-              <Td>0</Td>
             </Tr>
             <Tr>
               <Th isSticky>Tax Deductions Available</Th>
               <Td>60000</Td>
-              <Td>0</Td>
               <Td>0</Td>
               <Td>0</Td>
               <Td>0</Td>
@@ -85,7 +99,6 @@ export default function RoiAnalysis() {
               <Td>71533</Td>
               <Td>66290</Td>
               <Td>16000</Td>
-              <Td>15000</Td>
             </Tr>
             <Tr>
               <Th isSticky>NET Rate of Return over term</Th>
@@ -93,11 +106,9 @@ export default function RoiAnalysis() {
               <Td>71.5%</Td>
               <Td>66.29%</Td>
               <Td>16%</Td>
-              <Td>15%</Td>
             </Tr>
             <Tr>
               <Th isSticky>Inflation Rate over term</Th>
-              <Td>16%</Td>
               <Td>16%</Td>
               <Td>16%</Td>
               <Td>16%</Td>
@@ -109,7 +120,6 @@ export default function RoiAnalysis() {
               <Td>55.5%</Td>
               <Td>50.29%</Td>
               <Td>0%</Td>
-              <Td>-1%</Td>
             </Tr>
           </tbody>
         </table>

@@ -8,7 +8,7 @@ export const meta: MetaFunction = () => ({
 
 export default function ReportLayoutPage() {
   return (
-    <div className="p-5 space-y-6 md:p-10 prose mx-auto md:!max-w-3xl">
+    <div className="p-5 space-y-6 md:p-10 prose mx-auto md:!max-w-4xl">
       <Outlet />
     </div>
   );

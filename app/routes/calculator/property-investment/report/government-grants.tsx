@@ -117,7 +117,11 @@ export default function GovernmentGrantPage() {
               {formatCurrency(loaderData?.monthlyPaymentWithIncentive)}
             </p>
             <p className="font-bold">
-              Money Saved over Term:{" "}
+              Money Saved every Month:{" "}
+              {formatCurrency(loaderData?.moneySavedEveryMonth)}
+            </p>
+            <p className="font-bold">
+              Money Saved over 5 year Term:{" "}
               {formatCurrency(loaderData?.moneySavedOverTerm)}
             </p>
             <p className="font-bold">

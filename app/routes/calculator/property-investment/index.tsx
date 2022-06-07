@@ -60,7 +60,7 @@ export default function PropertyInvestmentInputPage() {
           name={"propertyType"}
           label="How do you Intend to use this property?"
           initialOption={
-            searchParams.get("propertyType") || "Select a Property Type"
+            searchParams.get("propertyType") || "Select how you Intend to use this property"
           }
           items={propertyTypeChoice}
           error={

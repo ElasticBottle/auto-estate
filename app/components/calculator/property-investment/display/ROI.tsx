@@ -13,19 +13,27 @@ import {
 import { ROUTE_CALC_PROPERTY_INVEST_ROI_ANALYSIS } from "~/constants/routes";
 import { Direction } from "~/interface/calculator/PropertyInvestment";
 import { formatPerc } from "~/lib/utils";
+import classNames from "classnames";
 
 export default function ROI() {
   const loaderData = useLoaderData();
   const location = useLocation();
   const [, setDirection] = useAtom(pageDirectionAtom);
-  const [years, setYears] = React.useState(7);
+  const [years, setYears] = React.useState(5);
   const [hasRevenue, setHasRevenue] = React.useState(
     loaderData?.propertyDetails.propertyType !== propertyTypeChoice[1]
   );
   return (
     <div className="flex flex-col items-center px-10 space-y-7">
       <div className="text-base font-bold text-center">
-        ROI: {formatPerc(loaderData?.roi)} Over past {years} years
+        ROI: <span
+          className={`${classNames({
+            "text-green-500": loaderData?.roi >= 0,
+            "text-red-500": loaderData?.roi < 0,
+          })}`}
+        >
+          {formatPerc(loaderData?.roi)}
+        </span> Over past {years} years
       </div>
       {/* <input
         className="my-3 "
@@ -51,9 +59,6 @@ export default function ROI() {
           <li>
             Real Yearly Return: {formatPerc(loaderData?.realYearlyReturn)}
           </li>
-          {hasRevenue && (
-          <li>Cap Rate: {formatPerc(loaderData?.capRate)}</li>
-          )}
         </ul>
         <ReactCharts
           option={{
@@ -62,7 +67,7 @@ export default function ROI() {
               labels: Object.keys(loaderData?.propertyPriceOverYears || []),
               datasets: [
                 {
-                  label: "Price of houses",
+                  label: "Price of property",
                   data: Object.values(loaderData?.propertyPriceOverYears || []),
                   ...defaultGraphDataOptions({ colorCount: 1 }),
                 },

@@ -46,57 +46,54 @@ export function calculatePropertyInvestmentReportSummaryValues(
   const mortgageInsurance = calculateMortgageInsurance(propertyDetails);
   const termInterest = calculateTermInterest(propertyDetails);
   const firstTimeBuyerIncentive = calculatefirstTimeBuyerIncentive(propertyDetails,financialDetails)
-  let ROI = (price - (0.9354 * 0.7536 * 1.0065 * 0.9686 * 0.8665 * 0.7627 * 0.7971 * price)) / (0.9354 * 0.7536 * 1.0065 * 0.9686 * 0.8665 * 0.7627 * 0.7971 * price)
+  let ROI = (price - (1.0065 * 0.9686 * 0.8665 * 0.7627 * 0.7971 * price)) / (1.0065 * 0.9686 * 0.8665 * 0.7627 * 0.7971 * price)
+  const revenue = calculateHasRevenue(propertyDetails);
+  const residence = calculateResidence(propertyDetails);
   return {
     // todo: Fill out the values here
-    monthlyNetIncomeFromProperty: (0.64 * 113 * 30) - (mortgagePayments + propertyTaxPayments +
-      insurancePayments + 283 + maintenanceFee + 200),
-
+    monthlyNetIncomeFromProperty: 2350 - (mortgagePayments + propertyTaxPayments +
+      insurancePayments + 200 + 200 + 100),
     // Monthly Cost Section
     totalMonthlyCost:
       mortgagePayments +
       propertyTaxPayments +
       insurancePayments +
-      283 +
-      maintenanceFee +
-      200,
+      200 +
+      200+
+      100,
     monthlyMortgage: mortgagePayments,
     propertyTax: propertyTaxPayments,
     homeOwnerInsurance: insurancePayments,
-    utilityBill: 283,
-    maintenanceFee: maintenanceFee,
-    miscFees: 200,
+    utilityBill: 200,
+    maintenanceFee: 200,
+    miscFees: 100,
 
     // Monthly Revenue Section
-    averageMonthlyRevenue: 0.64 * 113 * 30,
-    forecastedMonthlyRevenue: {
-      January: 10,
-      February: 10,
-      March: 10,
-      April: 10,
-      May: 10,
-      June: 10,
-      July: 10,
-      August: 10,
-      September: 10,
-      October: 10,
-      November: 10,
-      December: 10,
+    averageMonthlyRevenue: 2350,
+    pastMonthlyRevenue: {
+      2017: 1275,
+      2018: 1500,
+      2019: 1750,
+      2020: 1960,
+      2021: 1875,
+      2022: 2350,
     },
     // this is 60%
-    averageOccupancy: 0.64,
-    averageDailyRate: 113,
-    bestRevenueMonth: "October",
-    worstRevenueMonth: "May",
+    increaseRent: 0.8431,
+    yearlyIncrease: 0.1301,
+    yearlyInflation: 0.0281,
+    realYearlyIncrease: 0.0992,
+    monthlyOperatingIncome: 2350 - (propertyTaxPayments + insurancePayments + 200 + 200 + 100),
+    capRate: ((2350 - (propertyTaxPayments + insurancePayments + 200 + 200 + 100))*12) / price,
 
     // Closing Cost Section
-    closingCosts: landTransferTax + 900 + (mortgageInsurance * 0.08) + 900 + 100 + 200 + 1000,
+    closingCosts: landTransferTax + 900 + (mortgageInsurance * 0.08) + 100 + 200 + 400 + 450 + 300,
     landTransferTax: landTransferTax,
     legalFees: 900,
     estoppelCertificateFees: 100,
     governmentRegistrationFees: 200,
     pstOnCMHC: mortgageInsurance * 0.08,
-    titleInsurance: 250,
+    titleInsurance: 400,
     homeInspection: 450,
     homeAppraisal: 300,
     other: 300,
@@ -104,13 +101,10 @@ export function calculatePropertyInvestmentReportSummaryValues(
 
     // ROI section
     roi: ROI,
-    averageYearlyReturn: (1+ROI)**(1/7) - 1,
-    averageInflation: 0.0196,
-    realYearlyReturn: ((1+ROI)**(1/7) - 1) - 0.0196,
-    capRate: 0.05,
+    averageYearlyReturn: (1+ROI)**(1/5) - 1,
+    averageInflation: 0.0281,
+    realYearlyReturn: (((1+ROI)**(1/5)) / (1.0281)) - 1,
     propertyPriceOverYears: {
-      2015: Math.round(0.9354 * 0.7536 * 1.0065 * 0.9686 * 0.8665 * 0.7627 * 0.7971 * price),
-      2016: Math.round(0.7536 * 1.0065 * 0.9686 * 0.8665 * 0.7627 * 0.7971 * price),
       2017: Math.round(1.0065 * 0.9686 * 0.8665 * 0.7627 * 0.7971 * price),
       2018: Math.round(0.9686 * 0.8665 * 0.7627 * 0.7971 * price),
       2019: Math.round(0.8665 * 0.7627 * 0.7971 * price),
@@ -120,23 +114,22 @@ export function calculatePropertyInvestmentReportSummaryValues(
     },
 
     // Tax Benefits Section
-    totalTaxBenefits: ((termInterest / 5) + insurancePayments + (propertyTaxPayments * 12) + 200 + 283 + maintenanceFee + 200 + 0)*5 + (2000 + 750 + mortgageInsurance + 24000),
+    totalTaxBenefits: (((termInterest / 5) + (insurancePayments * 12) + (propertyTaxPayments * 12) + 200 + 200 + 400) * 5 * revenue) + ((2000 + 750 + mortgageInsurance) * residence),
     // Annual Tax breakdown
-    annualTaxBenefits: (termInterest / 5) + insurancePayments + (propertyTaxPayments * 12) + 200 + 283 + maintenanceFee + 200 + 0,
+    annualTaxBenefits: (termInterest / 5) +(insurancePayments * 12)  + (propertyTaxPayments * 12) + 200 + 200 + 400,
     mortgageInterest: termInterest / 5,
-    insurance: insurancePayments,
+    insurance: insurancePayments * 12,
     tax: (propertyTaxPayments * 12),
     advertizingCost: 200,
-    utilities: 283,
-    managementMaintenance: maintenanceFee + 200,
+    utilities: 200,
+    managementMaintenance: 400,
     workingFromHomeCredit: 0,
 
     // One time tax breakdown
-    oneTimeTaxBenefits: 2000 + 750 + mortgageInsurance + 24000,
+    oneTimeTaxBenefits: 2000 + 750 + mortgageInsurance,
     movingExpenses: 2000,
     firstTimeHomeBuyersCredit: 750,
     mortgageInsurance: mortgageInsurance,
-    gsthstNewHousingRebate: 24000,
 
     // gov grant section
     maxGovernmentGrants: firstTimeBuyerIncentive + 35000,
@@ -186,7 +179,7 @@ function calculateMortgageSize(propertyDetails: PropertyDetailsFormType) {
 }
 
 function calculateMonthlyMortgage(propertyDetails: PropertyDetailsFormType) {
-  const interest = 0.002833;
+  const interest = 0.00281347;
   const mortgage = calculateMortgageSize(propertyDetails);
   const time = parseInt(propertyDetails.loanPeriod);
   const monthlyMortgage =
@@ -253,7 +246,7 @@ function calculateFinalLandTransferTax(propertyDetails: PropertyDetailsFormType)
   const price = propertyDetails.propertyPrice;
   const LandTransferTax = calculateLandTransferTax(propertyDetails);
   let tax = 0;
-  if (propertyDetails.firstTimeHomeBuyer === "Yes") {
+  if (propertyDetails.firstTimeHomeBuyer === "Yes" && propertyDetails.propertyType === "I will live there") {
     if (price <= 368333) {
       tax = 0;
     } else {
@@ -268,7 +261,7 @@ function calculateFinalLandTransferTax(propertyDetails: PropertyDetailsFormType)
 
 function calculateTermInterest(propertyDetails: PropertyDetailsFormType) {
   let mortgage = calculateMortgageSize(propertyDetails);
-  const interest = 0.002833;
+  const interest = 0.00281347;
   const mortgagePayments = calculateMonthlyMortgage(propertyDetails)
   let month = 1;
   let termInterest = 0;
@@ -289,7 +282,7 @@ function calculatefirstTimeBuyerIncentive(propertyDetails: PropertyDetailsFormTy
   const newDownPayment = downPayment + 0.05*price;
   const ltv = 1 - (newDownPayment / price);
   let incentive = 0;
-  if ((propertyType === "I will live there" || propertyType === "I will live there and rent out part of it") && propertyDetails.firstTimeHomeBuyer === "Yes") {
+  if ((propertyType === "I will live there") && propertyDetails.firstTimeHomeBuyer === "Yes") {
     if ((loan <= 48*income) && (ltv > 0.8) && (income <= 10000)){
       incentive = 0.05 * price;
     }
@@ -301,4 +294,22 @@ function calculatefirstTimeBuyerIncentive(propertyDetails: PropertyDetailsFormTy
     incentive = 0;
   }
   return incentive;
+}
+
+function calculateHasRevenue(propertyDetails: PropertyDetailsFormType) {
+  if (propertyDetails.propertyType === "I will rent it out") {
+    return 1;
+  }
+  else {
+    return 0;
+  }
+}
+
+function calculateResidence(propertyDetails: PropertyDetailsFormType) {
+  if (propertyDetails.propertyType === "I will live there") {
+    return 1;
+  }
+  else {
+    return 0;
+  }
 }

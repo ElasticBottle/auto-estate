@@ -49,14 +49,16 @@ export default function ReportPage() {
   const [hasRevenue, setHasRevenue] = React.useState(
     loaderData?.propertyDetails.propertyType !== propertyTypeChoice[1]
   );
+  const [hasNoRevenue] = React.useState(
+    loaderData?.propertyDetails.propertyType !== propertyTypeChoice[0]
+  );
   // TODO: Prevent the disappearing of details when playing fade animation to another page
-
   return (
     <article className="space-y-10">
       <h1>Your Investment Evaluation Report</h1>
       {hasRevenue && (
       <p className="text-base font-bold">
-        Monthly Net Income from property:{" "}
+       Estimated Monthly Net Income from property:{" "}
         <span
           className={`${classNames({
             "text-green-500": loaderData?.monthlyNetIncomeFromProperty > 0,
@@ -84,7 +86,7 @@ export default function ReportPage() {
                   "Homeowner's Insurance",
                   "Utility Bill",
                   "Maintenance Fees",
-                  "Misc Fees",
+                  "HOA Fees",
                 ],
                 datasets: [
                   {
@@ -105,7 +107,7 @@ export default function ReportPage() {
                 ...defaultGraphOptions,
                 plugins: {
                   legend: {
-                    position: "top",
+                    position: "bottom",
                   },
                   title: {
                     display: true,
@@ -117,7 +119,7 @@ export default function ReportPage() {
           />
           <ul className="p-0 list-none">
             <li>
-              Monthly Mortgage: {formatCurrency(loaderData?.monthlyMortgage)}
+              Monthly Mortgage {"(includes any mortgage insurance)"}: {formatCurrency(loaderData?.monthlyMortgage)}
             </li>
             <li>Property Tax: {formatCurrency(loaderData?.propertyTax)}</li>
             <li>
@@ -128,7 +130,7 @@ export default function ReportPage() {
             <li>
               Maintenance Fees: {formatCurrency(loaderData?.maintenanceFee)}
             </li>
-            <li>Misc Fees: {formatCurrency(loaderData?.miscFees)}</li>
+            <li>HOA Fees: {formatCurrency(loaderData?.miscFees)}</li>
           </ul>
         </div>
         {hasRevenue && (
@@ -140,32 +142,30 @@ export default function ReportPage() {
               </li>
             </ul>
             <ReactCharts
-              className="aspect-square"
               option={{
-                type: "bar",
+                type: "line",
                 data: {
-                  labels: Object.keys(
-                    loaderData?.forecastedMonthlyRevenue || []
-                  ),
+                  labels: Object.keys(loaderData?.pastMonthlyRevenue || []),
                   datasets: [
                     {
-                      label: "Forecasted Monthly Revenue",
-                      data: Object.values(
-                        loaderData?.forecastedMonthlyRevenue || []
-                      ),
+                      label: "Rental Yield of Property",
+                      data: Object.values(loaderData?.pastMonthlyRevenue || []),
                       ...defaultGraphDataOptions({ colorCount: 1 }),
+                     
                     },
                   ],
                 },
                 options: {
                   ...defaultGraphOptions,
+                  aspectRatio: 1,
                   plugins: {
                     legend: {
-                      position: "top",
+                      display: true,
+                      position: "bottom"
                     },
                     title: {
                       display: true,
-                      text: "Monthly Revenue Forecast",
+                      text: "Rental Yield of Property over the last 5 years",
                     },
                   },
                 },
@@ -173,17 +173,23 @@ export default function ReportPage() {
             />
             <ul className="p-0 list-none">
               <li>
-                Average Occupancy: {formatPerc(loaderData?.averageOccupancy)}
+                Increase in Rent over the last 5 years: {formatPerc(loaderData?.increaseRent)}
               </li>
               <li>
-                Average Daily Rate:{" "}
-                {formatCurrency(loaderData?.averageDailyRate)}
+                Average Yearly Increase:{" "}
+                {formatPerc(loaderData?.yearlyIncrease)}
               </li>
               <li>
-                Month With Highest Revenue: {loaderData?.bestRevenueMonth}
+                Average Yearly Inflation: {formatPerc(loaderData?.yearlyInflation)}
               </li>
               <li>
-                Month With Lowest Revenue: {loaderData?.worstRevenueMonth}
+                Real Yearly Increase: {formatPerc(loaderData?.realYearlyIncrease)}
+              </li>
+              <li>
+                Estimated Net Operating Income: {formatCurrency(loaderData?.monthlyOperatingIncome)}
+              </li>
+              <li>
+                Estimated Cap Rate: {formatPerc(loaderData?.capRate)}
               </li>
             </ul>
           </div>
@@ -195,6 +201,31 @@ export default function ReportPage() {
           Estimated Closing Cost: {formatCurrency(loaderData?.closingCosts)}
         </div>
         <div className="flex flex-col md:justify-center md:flex-row md:space-x-5">
+        <ul className="p-0 list-none">
+            <li>
+              Land Transfer Tax {"(including any rebate)"}: {formatCurrency(loaderData?.landTransferTax)}
+            </li>
+            <li>Legal Fees: {formatCurrency(loaderData?.legalFees)}</li>
+            <li>
+               Estoppel Certificate Fees:{" "}
+              {formatCurrency(loaderData?.estoppelCertificateFees)}
+            </li>
+            <li>
+              Government Registration Fees: {formatCurrency(loaderData?.governmentRegistrationFees)}
+            </li>
+          </ul>
+          <ul className="p-0 list-none">
+            <li>
+              PST on Mortgage Insurance: {formatCurrency(loaderData?.pstOnCMHC)}
+            </li>
+            <li>
+              Title Insurance: {formatCurrency(loaderData?.titleInsurance)}
+            </li>
+            <li>
+              Home Inspection: {formatCurrency(loaderData?.homeInspection)}
+            </li>
+            <li>Home Appraisal: {formatCurrency(loaderData?.homeAppraisal)}</li>
+          </ul>
           <ReactCharts
             option={{
               type: "doughnut",
@@ -251,9 +282,10 @@ export default function ReportPage() {
           {formatCurrency(loaderData?.totalTaxBenefits)}
         </div>
         <div className="flex flex-col md:justify-center md:space-x-5 md:flex-row">
+        {hasRevenue && (
           <ul className="p-0 list-none">
             <li className="text-base font-bold ">
-              Annual Tax benefits:{" "}
+              Average Annual Tax Deductables over Term:{" "}
               {formatCurrency(loaderData?.annualTaxBenefits)}
             </li>
             <li>
@@ -271,32 +303,23 @@ export default function ReportPage() {
               Maintenance and Management Cost:{" "}
               {formatCurrency(loaderData?.managementMaintenance)}
             </li>
-            <li>
-              Working from Home Credits:{" "}
-              {formatCurrency(loaderData?.workingFromHomeCredit)}
-            </li>
           </ul>
+        )}
+        {hasNoRevenue && (
           <ul className="p-0 list-none">
             <li className="text-base font-bold ">
               One Time Tax benefits:{" "}
               {formatCurrency(loaderData?.oneTimeTaxBenefits)}
             </li>
             <li>
-              First Time Home Buyer's Tax Credit:{" "}
+              Home Buyer's Amount:{" "}
               {formatCurrency(loaderData?.firstTimeHomeBuyersCredit)}
             </li>
             <li>
               Moving Expenses: {formatCurrency(loaderData?.movingExpenses)}
             </li>
-            <li>
-              Mortgage Insurance:{" "}
-              {formatCurrency(loaderData?.mortgageInsurance)}
-            </li>
-            <li>
-              GST/HST New Housing Rebate:{" "}
-              {formatCurrency(loaderData?.gsthstNewHousingRebate)}
-            </li>
           </ul>
+        )}
         </div>
         <Link
           to={{
@@ -311,7 +334,7 @@ export default function ReportPage() {
           Click here for a detailed and accurate tax benefit analysis
         </Link>
       </div>
-
+      {hasNoRevenue && ( 
       <section className="px-10">
         <p>Did you know ?</p>
         <p>
@@ -325,11 +348,13 @@ export default function ReportPage() {
           payments.
         </p>
       </section>
-
+      )}
+      {hasNoRevenue && ( 
       <div className="flex flex-col items-center px-10 space-y-4">
         <div className="text-base font-bold text-center">
-          Maximum Government Grants you could qualify for:{" "}
-          {formatCurrency(loaderData?.maxGovernmentGrants)}
+          Maximum Government Incentives and Programs you could qualify for:{" "}
+          {formatCurrency(loaderData?.firstTimeBuyerIncentive)} {"+"} {"you can withdraw up to "}
+           {formatCurrency(loaderData?.homeBuyerGrant)} {"of your tax free savings from your RRSP through Home Buyer's Plan"}
         </div>
         <section className="flex flex-col md:flex-row md:space-x-5">
           <p>Home Buyer’s Plan: {formatCurrency(loaderData?.homeBuyerGrant)}</p>
@@ -351,6 +376,7 @@ export default function ReportPage() {
           Click here to learn more about these programs
         </Link>
       </div>
+      )}
     </article>
   );
 }

@@ -8,7 +8,6 @@ export const enum Direction {
 export const propertyTypeChoice = [
   "I will rent it out",
   "I will live there",
-  "I will live there and rent out part of it",
 ] as const;
 export const propertyLocationChoice = [
   "Waterloo, Ontario, Canada",
@@ -136,9 +135,8 @@ export const UserDetailFormSchema = z.object({
 export type UserDetailFormType = z.infer<typeof UserDetailFormSchema>;
 
 export const roiAnalysisInvestmentType = [
-  "Your Real Estate Investment",
+  "Your Investment",
   "S&P 500",
   "TSX Composite",
-  "High Interest Savings Account",
-  "5 year Bond",
+  "Canadian Apartment Properties (REIT)",
 ] as const;
