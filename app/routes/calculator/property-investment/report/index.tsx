@@ -321,6 +321,7 @@ export default function ReportPage() {
           </ul>
         )}
         </div>
+        {hasRevenue && (
         <Link
           to={{
             pathname: ROUTE_CALC_PROPERTY_INVEST_TAX_BENEFITS,
@@ -333,6 +334,7 @@ export default function ReportPage() {
         >
           Click here for a detailed and accurate tax benefit analysis
         </Link>
+        )}
       </div>
       {hasNoRevenue && ( 
       <section className="px-10">

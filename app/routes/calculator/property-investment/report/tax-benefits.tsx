@@ -8,6 +8,7 @@ import {
   defaultGraphDataOptions,
   defaultGraphOptions,
 } from "~/constants/graph";
+import { propertyTypeChoice } from "~/interface/calculator/PropertyInvestment";
 import { calculateTaxBenefitValues } from "~/lib/calculator/propertyInvestment/calculateTaxBenefitValues";
 import {
   formatCurrency,
@@ -18,6 +19,7 @@ import {
 export const loader: LoaderFunction = ({ request }) => {
   const { userDetails, propertyDetails, financialDetails } =
     getPropertyInvestmentCalculatorDetails(request.url);
+    
 
   const result = calculateTaxBenefitValues(
     userDetails.data,
@@ -27,11 +29,18 @@ export const loader: LoaderFunction = ({ request }) => {
 
   return json({
     ...result,
+    propertyDetails: propertyDetails.data,
   });
 };
 
 export default function TaxBenefitsPage() {
   const loaderData = useLoaderData();
+  const [hasRevenue, setHasRevenue] = React.useState(
+    loaderData?.propertyDetails.propertyType !== propertyTypeChoice[1]
+  );
+  const [hasNoRevenue] = React.useState(
+    loaderData?.propertyDetails.propertyType !== propertyTypeChoice[0]
+  );
 
   return (
     <article className="lg:min-w-[35rem]">
@@ -61,7 +70,7 @@ export default function TaxBenefitsPage() {
                   plugins: {
                     legend: {
                       display: true,
-                      position: "top",
+                      position: "bottom",
                     },
                     title: {
                       display: true,
@@ -119,10 +128,11 @@ export default function TaxBenefitsPage() {
                 },
                 options: {
                   ...defaultGraphOptions,
+                  aspectRatio: 1,
                   plugins: {
                     legend: {
                       display: true,
-                      position: "top",
+                      position: "bottom",
                     },
                     title: {
                       display: true,
@@ -141,7 +151,7 @@ export default function TaxBenefitsPage() {
               }}
             />
             <p>
-              By using the tax deductions, you effectivity can increase your net
+              By making use of the available tax deductions, you can effectively increase your net
               income by {formatPerc(loaderData?.netIncomeChangePercentage)}
             </p>
           </div>
@@ -151,11 +161,19 @@ export default function TaxBenefitsPage() {
               {formatCurrency(loaderData?.annualTaxBeforeDeductibles)}
             </li>
             <li>
+              Net Income before Deductions:{" "}
+              {formatCurrency(loaderData?.annualIncomeWithoutDeductions)}
+            </li>
+            <li>
               Eligible Deductions:{" "}
               {formatCurrency(loaderData?.eligibleDeductions)}
             </li>
             <li>
-              Net Annual Income: {formatCurrency(loaderData?.netAnnualIncome)}
+              Annual Tax Bill after Deductions :{" "}
+              {formatCurrency(loaderData?.taxedBillAfterDeductibles)}
+            </li>
+            <li>
+              Net Annual Income after Deductions: {formatCurrency(loaderData?.netAnnualIncome)}
             </li>
           </ul>
         </div>
@@ -179,64 +197,45 @@ export default function TaxBenefitsPage() {
               <Tr className="bg-base-200 whitespace-nowrap">
                 <Th isSticky className="md:min-w-[140px]"></Th>
                 <Th>Estimated Deduction</Th>
-                <Th>Maximum Deduction</Th>
-                <Th>Tax Credit</Th>
+                <Th>Estimated Tax Credit</Th>
                 <Th>Additional Comments</Th>
                 <Th>Line on Tax form</Th>
               </Tr>
             </thead>
             <tbody>
+              {hasRevenue && (
               <Tr>
                 <Th isSticky>Rental Income Deductions</Th>
-                <Td>CA$ 19781</Td>
-                <Td>CA$ 26028</Td>
+                <Td>CA$ 20483</Td>
                 <Td>CA$ 0</Td>
                 <Td>Includes all rental expenses and mortgage interest</Td>
-                <Td>Form T776, line 8299</Td>
+                <Td>Form: T1 General   
+                    Line: 12600
+                </Td>
               </Tr>
+             )}
+              {hasNoRevenue && (
               <Tr>
-                <Th isSticky>CMHC Insurance</Th>
-                <Td>Purple</Td>
-                <Td>Purple</Td>
-                <Td>Purple</Td>
-                <Td>Purple</Td>
-                <Td>Purple</Td>
+                <Th isSticky>Home Buyer's Amount</Th>
+                <Td>CA$ 0</Td>
+                <Td>CA$ 750</Td>
+                <Td>It is a non refundable tax credit for first time homebuyers</Td>
+                <Td>Form: T1 General
+                    Line: 31270</Td>
               </Tr>
-              <Tr>
-                <Th isSticky>First Time Home Buyer’s Credit</Th>
-                <Td>Red</Td>
-                <Td>Red</Td>
-                <Td>Red</Td>
-                <Td>Red</Td>
-                <Td>Red</Td>
-              </Tr>
+              )}
+              {hasNoRevenue && (
               <Tr>
                 <Th isSticky>Moving Expenses</Th>
-                <Td>Red</Td>
-                <Td>Red</Td>
-                <Td>Red</Td>
-                <Td>Red</Td>
-                <Td>Red</Td>
+                <Td>CA$ 2000</Td>
+                <Td>CA$ 0</Td>
+                <Td>You can claim moving expenses upto CA$ 5000 and includes transportation and storage costs</Td>
+                <Td>Form: T1 General
+                    Line: 21900
+                </Td>
               </Tr>
-              <Tr>
-                <Th isSticky>GST/HST Rebate</Th>
-                <Td>Red</Td>
-                <Td>Red</Td>
-                <Td>Red</Td>
-                <Td>Red</Td>
-                <Td>Red</Td>
-              </Tr>
-              <Tr>
-                <Th isSticky>
-                  Working from <wbr />
-                  Home Credits
-                </Th>
-                <Td>Red</Td>
-                <Td>Red</Td>
-                <Td>Red</Td>
-                <Td>Red</Td>
-                <Td>Red</Td>
-              </Tr>
+              )}
+              
             </tbody>
           </table>
         </div>

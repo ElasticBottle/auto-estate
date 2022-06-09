@@ -1,9 +1,9 @@
 import { useLoaderData } from "@remix-run/react";
-import { LoaderFunction, json } from "@remix-run/server-runtime";
+import { LoaderFunction, json, redirect } from "@remix-run/server-runtime";
 import React from "react";
 import { ReactCharts } from "~/components/Graph";
 import { Td, Th, Tr } from "~/components/Tables";
-import { defaultGraphOptions } from "~/constants/graph";
+import { defaultGraphDataOptions, defaultGraphOptions } from "~/constants/graph";
 import { roiAnalysisInvestmentType } from "~/interface/calculator/PropertyInvestment";
 import { calculatePropertyInvestmentReportSummaryValues } from "~/lib/calculator/propertyInvestment/calculatePropertyInvestmentReportSummaryValues";
 import { calculateRoiAnalysisValues } from "~/lib/calculator/propertyInvestment/calculateRoiAnalysisValues";
@@ -54,9 +54,9 @@ export default function RoiAnalysis() {
             <Tr>
               <Th isSticky>Gross ROI (Capital Gains)</Th>
               <Td>{formatPerc(loaderData?.roi)}</Td>
-              <Td>98.36%</Td>
-              <Td>39.14%</Td>
-              <Td>69.58%</Td>
+              <Td>69.25%</Td>
+              <Td>34.38%</Td>
+              <Td>41.46%</Td>
             </Tr>
             <Tr>
               <Th isSticky>Capital Gains on Down Payment over term</Th>
@@ -66,85 +66,31 @@ export default function RoiAnalysis() {
               <Td>{formatCurrency(loaderData?.reitInvestment)}</Td>
             </Tr>
             <Tr>
-              <Th isSticky>Average Annual Income</Th>
-              <Td>{formatCurrency(loaderData?.incomeInvestment)}</Td>
-              <Td>{formatCurrency(loaderData?.incomeSP)}</Td>
-              <Td>{formatCurrency(loaderData?.incomeTSX)}</Td>
-              <Td>{formatCurrency(loaderData?.incomeREIT)}</Td>
+              <Th isSticky>Average Yearly Return</Th>
+              <Td>14.26%</Td>
+              <Td>11.10%</Td>
+              <Td>6.08%</Td>
+              <Td>7.18%</Td>
             </Tr>
             <Tr>
-              <Th isSticky>EBITA over term</Th>
-              <Td>{formatCurrency(loaderData?.ebitaInvestment)}</Td>
-              <Td>{formatCurrency(loaderData?.ebitaSP)}</Td>
-              <Td>{formatCurrency(loaderData?.ebitaTSX)}</Td>
-              <Td>{formatCurrency(loaderData?.ebitaREIT)}</Td>
+              <Th isSticky>Average Yearly Inflation Rate</Th>
+              <Td>2.81%</Td>
+              <Td>3.35%
+                  {"(Inflation Rate in USA)"}
+              </Td>
+              <Td>2.81%</Td>
+              <Td>2.81%</Td>
             </Tr>
             <Tr>
-              <Th isSticky>Tax Obligation</Th>
-              <Td>94772</Td>
-              <Td>30657</Td>
-              <Td>28410</Td>
-              <Td>0</Td>
-            </Tr>
-            <Tr>
-              <Th isSticky>Tax Deductions Available</Th>
-              <Td>60000</Td>
-              <Td>0</Td>
-              <Td>0</Td>
-              <Td>0</Td>
-            </Tr>
-            <Tr>
-              <Th isSticky>NET Gains</Th>
-              <Td>202158</Td>
-              <Td>71533</Td>
-              <Td>66290</Td>
-              <Td>16000</Td>
-            </Tr>
-            <Tr>
-              <Th isSticky>NET Rate of Return over term</Th>
-              <Td>202%</Td>
-              <Td>71.5%</Td>
-              <Td>66.29%</Td>
-              <Td>16%</Td>
-            </Tr>
-            <Tr>
-              <Th isSticky>Inflation Rate over term</Th>
-              <Td>16%</Td>
-              <Td>16%</Td>
-              <Td>16%</Td>
-              <Td>16%</Td>
-            </Tr>
-            <Tr>
-              <Th isSticky>Real Rate of Return</Th>
-              <Td>186%</Td>
-              <Td>55.5%</Td>
-              <Td>50.29%</Td>
-              <Td>0%</Td>
+              <Th isSticky>Average Real Rate of Return</Th>
+              <Td>11.14%</Td>
+              <Td>7.50%</Td>
+              <Td>3.18%</Td>
+              <Td>4.25%</Td>
             </Tr>
           </tbody>
         </table>
       </div>
-      <ReactCharts
-        option={{
-          type: "line",
-          data: {
-            labels: [...roiAnalysisInvestmentType],
-            datasets: [],
-          },
-          options: {
-            ...defaultGraphOptions,
-            plugins: {
-              legend: {
-                position: "top",
-              },
-              title: {
-                display: true,
-                text: "ROI Analysis breakdown",
-              },
-            },
-          },
-        }}
-      />
     </article>
   );
 }
